@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/juans"
+    tools:context=".PrivacyPolicy">
+
+    <LinearLayout
+        android:id="@+id/navtop"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_marginStart="15dp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Privacy Policy"
+            android:textColor="@color/black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="end">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:src="@drawable/cross" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
+        android:scrollbars="none">
+
+
+        <TextView
+            android:id="@+id/privacy_policy_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:textSize="12sp"
+            android:textColor="@android:color/white"
+            android:lineSpacingMultiplier="1.2"
+            android:padding="8dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="1. Introduction\n
+
+Welcome to [Your App Name]. We respect your privacy and are committed to protecting your personal information.
+This Privacy Policy explains how we collect, use, and disclose information about you when you use our app.\n \n \n
+
+2. Information We Collect\n
+
+• Personal Information: When you create an account or use our app, we may collect personal information such as your name, email address, phone number, and payment information.\n \n
+
+• Usage Data: We may collect information about how you interact with our app, such as your IP address, device information, pages viewed, and the time and date of your visits.\n \n
+
+• Location Data: With your consent, we may collect and process information about your location to provide location-based services.\n \n
+
+3. How We Use Your Information\n
+
+We may use your information for the following purposes:\n
+
+• To provide, maintain, and improve our app.\n \n
+
+• To communicate with you, including responding to your inquiries and providing customer support.\n \n
+
+• To process transactions and manage your account.\n \n
+
+• To send you updates, promotions, and marketing communications (you may opt out at any time).\n \n
+
+• To analyze usage patterns and improve our services.\n \n
+
+• To ensure the security and integrity of our app.\n \n
+
+4. Sharing Your Information
+
+We do not sell your personal information to third parties. However, we may share your information with:\n \n
+
+• Service Providers: We may share your information with third-party vendors who help us operate our app, such as payment processors, hosting providers, and analytics services.\n \n
+
+• Legal Requirements: We may disclose your information if required by law or if we believe it is necessary to protect our rights, comply with legal obligations, or prevent fraud.\n \n
+
+• Business Transfers: In the event of a merger, acquisition, or sale of our assets, your information may be transferred to the new owner.\n \n " />
+
+    </ScrollView>
+
+
+    <LinearLayout
+
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="0.2"
+            android:gravity="center">
+
+
+            <ImageView
+                android:id="@+id/home"
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="-1dp"
+                android:src="@drawable/homenav"
+                app:tint="@color/black" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="0.2"
+            android:gravity="center">
+
+
+            <ImageView
+                android:id="@+id/Cast"
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/casttnav"
+                app:tint="@color/black" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="0.2"
+
+            android:gravity="center">
+
+
+            <ImageView
+                android:id="@+id/Community"
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/communitynav"
+
+                />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="0.2"
+            android:gravity="center">
+
+
+            <ImageView
+                android:id="@+id/Store"
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="-1dp"
+                android:src="@drawable/storenav"
+                app:tint="@color/black" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="0.2"
+            android:gravity="center">
+
+
+            <ImageView
+                android:id="@+id/profile"
+                android:layout_width="90dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/baseline_person_pin_24"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

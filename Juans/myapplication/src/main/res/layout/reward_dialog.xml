@@ -1,0 +1,46 @@
+<!-- reward_dialog.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/text_reward_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Congratulations!"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/text_reward_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="You have logged in for 7 consecutive days. Claim your reward!"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btn_claim"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Claim"
+        android:textSize="18sp"
+        android:background="@drawable/whitebackground"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textSize="18sp"
+        android:background="@drawable/whitebackground"
+        android:textColor="@android:color/black" />
+
+</LinearLayout>

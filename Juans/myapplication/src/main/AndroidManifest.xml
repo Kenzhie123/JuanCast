@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.JuanCast.myapplication">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Juans">
+        <activity
+            android:name=".Notices"
+            android:exported="false" />
+        <activity
+            android:name=".Faqs"
+            android:exported="false" />
+        <activity
+            android:name=".About"
+            android:exported="false" />
+        <activity
+            android:name=".PrivacyPolicy"
+            android:exported="false" />
+        <activity
+            android:name=".Setting"
+            android:exported="false" />
+        <activity
+            android:name=".Issue"
+            android:exported="false" />
+        <activity
+            android:name=".NotifButton"
+            android:exported="false" />
+        <activity
+            android:name=".RewardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Transactions"
+            android:exported="false" />
+        <activity
+            android:name=".Juans"
+            android:exported="false" />
+        <activity
+            android:name=".CastVote"
+            android:exported="false" />
+        <activity
+            android:name=".VotingSpec"
+            android:exported="false" />
+        <activity
+            android:name=".Powerups"
+            android:exported="false" />
+        <activity
+            android:name=".Attendance"
+            android:exported="false" />
+        <activity
+            android:name=".PostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Profile"
+            android:exported="false" />
+        <activity
+            android:name=".ads"
+            android:exported="false" />
+        <activity
+            android:name=".StarStore"
+            android:exported="false" />
+        <activity
+            android:name=".Store"
+            android:exported="false" />
+        <activity
+            android:name=".Voting"
+            android:exported="false"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".Homepage"
+            android:exported="false" />
+        <activity
+            android:name=".LearnMore"
+            android:exported="false" />
+        <activity
+            android:name=".SignUp"
+            android:exported="false" />
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- AdMob App ID -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6114080410158173~4222116034" />
+    </application>
+
+</manifest>

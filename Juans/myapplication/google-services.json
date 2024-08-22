@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "766882661319",
+    "project_id": "vote-71958",
+    "storage_bucket": "vote-71958.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:766882661319:android:69f4bae6eb1555541ecfe2",
+        "android_client_info": {
+          "package_name": "com.JuanCast.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANtO1LaNpRq55C9nOdQdU_cPRWS6kmMuM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

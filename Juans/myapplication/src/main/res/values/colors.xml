@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="text_color_dark">#B3000000</color>
+    <color name="primary">#5271ff</color>
+    <color name="primary_darker">#2C3B81</color>
+    <color name="gold">#F1BA16</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="bronze">#CD7F32</color>
+    <color name="danger">#ff385a</color>
+    <color name="blue">#0000FF</color>
+
+
+
+</resources>
+
+

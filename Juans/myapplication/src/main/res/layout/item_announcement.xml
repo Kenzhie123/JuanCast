@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@drawable/whitebackground"
+    android:layout_margin="5dp"
+   >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Announcement!📢"
+        android:fontFamily="@font/montserrat_bold"
+        android:textColor="@color/danger"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/announcement_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:fontFamily="@font/montserrat_bold"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/announcement_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_regular"
+        android:textSize="12sp"
+        android:layout_marginBottom="15dp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/announcement_text"
+        android:text="....."
+        android:fontFamily="@font/montserrat_regular"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"/>
+
+
+</LinearLayout>

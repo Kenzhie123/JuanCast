@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Solid background color -->
+    <solid android:color="#5271ff" />
+
+    <!-- Rounded corners to make it an oblong shape -->
+    <corners
+        android:bottomRightRadius="150dp"
+        android:bottomLeftRadius="150dp"
+        android:topRightRadius="150dp"
+        android:topLeftRadius="150dp" />
+
+    <!-- White border with specified width -->
+    <stroke
+        android:width="4dp"
+        android:color="#5271ff" /> <!-- Color of the border (white in this case) -->
+</shape>

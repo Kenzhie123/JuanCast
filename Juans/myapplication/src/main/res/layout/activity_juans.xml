@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/loginbackg"
+    tools:context=".Juans">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity ="center"
+        android:orientation= "vertical">
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="320dp"
+            android:layout_height="200dp"
+            app:srcCompat="@drawable/verticallogo"/>
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_marginTop="-80dp"
+            app:srcCompat="@drawable/charactercollage"/>
+
+        <EditText
+            android:id="@+id/username_input"
+            android:layout_width="288dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-100dp"
+            android:background="@drawable/whitebackground"
+            android:fontFamily="@font/montserrat_regular"
+            android:hint="Email"
+            android:singleLine="true"
+            android:minHeight="48dp"
+            android:padding="15dp"
+            android:textColor="@color/black"
+            android:textColorHint="#9C5C5F61"
+            android:textSize="14sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirm_input_layout"
+            android:layout_marginTop="-5dp"
+            android:layout_width="wrap_content"
+            android:textColor="#9C5C5F61"
+            android:textColorHint="#9C5C5F61"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password_input"
+                android:layout_width="288dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:hint="Password"
+                android:fontFamily="@font/montserrat_regular"
+                android:background="@drawable/whitebackground"
+                android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:maxLength="20"
+                android:padding="15dp"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/rememberMeCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:theme="@style/MycheckBox"
+            android:text="Remember Me"/>
+
+
+        <Button
+            android:layout_width="288dp"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:fontFamily="@font/montserrat_regular"
+            android:backgroundTint="@color/white"
+            android:textColor="#3B84F1"
+            android:padding="5dp"
+            android:layout_marginTop="15dp"
+            android:textSize="14sp"
+            android:id="@+id/login_btn"/>
+
+        <TextView
+            android:id="@+id/goToForgotPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="Forgot Password? "
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textStyle="bold|italic"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Don't have an account?"
+            android:layout_marginTop="40dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:fontFamily="@font/montserrat_regular"
+            android:textStyle="bold|italic"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/SignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign Up!"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

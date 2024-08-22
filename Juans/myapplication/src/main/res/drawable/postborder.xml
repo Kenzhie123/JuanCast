@@ -1,0 +1,12 @@
+<!-- circle_border.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@android:color/transparent" /> <!-- Transparent background -->
+    <stroke
+        android:width="2dp"
+    android:color="#FFEB3B" /> <!-- Border color -->
+    <size
+        android:width="50dp"
+        android:height="50dp" />
+</shape>
+
