@@ -20,8 +20,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.JuanCast.myapplication.Receiver.StarChangeReceiver;
+import com.JuanCast.myapplication.models.ProductStar;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
@@ -34,14 +36,20 @@ import com.android.billingclient.api.QueryProductDetailsParams;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.collect.ImmutableList;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class StarStore extends AppCompatActivity {
 
@@ -88,8 +96,9 @@ public class StarStore extends AppCompatActivity {
     private LinearLayout SS_MarketItem5;
     private LinearLayout SS_MarketItem6;
 
-    TextView SS_Overlay;
-    ProgressBar SS_ProgressBar;
+    private TextView SS_Overlay;
+    private ProgressBar SS_ProgressBar;
+    private ConstraintLayout SS_OverlayContainer;
 
     BillingClient billingClient;
 
@@ -135,14 +144,10 @@ public class StarStore extends AppCompatActivity {
         SS_StarPrice6= findViewById(R.id.SS_StarPrice6);
         SS_Overlay= findViewById(R.id.SS_Overlay);
         SS_ProgressBar= findViewById(R.id.SS_ProgressBar);
+        SS_OverlayContainer= findViewById(R.id.SS_OverlayContainer);
 
-        billingClient = BillingClient.newBuilder(this).setListener(new PurchasesUpdatedListener() {
-            @Override
-            public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
 
-            }
-        }).enablePendingPurchases().build();
-        connectToGPlayBilling();
+
 
         logo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,6 +245,49 @@ public class StarStore extends AppCompatActivity {
         }
 
 
+        //Google Play Billing Section
+        initBilling();
+
+
+        SS_MarketItem1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                purchaseClick(0);
+            }
+        });
+        SS_MarketItem2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                purchaseClick(1);
+            }
+        });
+        SS_MarketItem3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                purchaseClick(2);
+            }
+        });
+        SS_MarketItem4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                purchaseClick(3);
+            }
+        });
+        SS_MarketItem5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                purchaseClick(4);
+            }
+        });
+        SS_MarketItem6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                purchaseClick(5);
+            }
+        });
+
+
+
     }
 
     @Override
@@ -285,22 +333,20 @@ public class StarStore extends AppCompatActivity {
                 });
     }
 
-    private void enable()
+    public void enable()
     {
-        SS_Overlay.setVisibility(View.GONE);
-        SS_ProgressBar.setVisibility(View.GONE);
+        SS_OverlayContainer.setVisibility(View.GONE);
     }
 
-    private void disable()
+    public void disable()
     {
-        SS_Overlay.setVisibility(View.VISIBLE);
-        SS_ProgressBar.setVisibility(View.VISIBLE);
+        SS_OverlayContainer.setVisibility(View.VISIBLE);
     }
 
     private void connectToGPlayBilling()
     {
-        Log.d("BILLINGTAG","STARTED");
         disable();
+
         billingClient.startConnection(
                 new BillingClientStateListener() {
                     @Override
@@ -327,192 +373,116 @@ public class StarStore extends AppCompatActivity {
         );
     }
 
-    private void getStarsProductsDetails()
+
+    private void initBilling()
     {
-        ArrayList<String> productIDList = new ArrayList<>();
-        productIDList.add("star_1000");
-        productIDList.add("star_5000");
-        productIDList.add("star_15000");
-        productIDList.add("star_40000");
-        productIDList.add("star_100000");
-        productIDList.add("star_500000");
-
-        List<QueryProductDetailsParams.Product> productList = new ArrayList<>();
-        productList.add(QueryProductDetailsParams.Product.newBuilder().setProductId("star_1000").setProductType(BillingClient.ProductType.INAPP).build());
-        productList.add(QueryProductDetailsParams.Product.newBuilder().setProductId("star_5000").setProductType(BillingClient.ProductType.INAPP).build());
-        productList.add(QueryProductDetailsParams.Product.newBuilder().setProductId("star_15000").setProductType(BillingClient.ProductType.INAPP).build());
-        productList.add(QueryProductDetailsParams.Product.newBuilder().setProductId("star_40000").setProductType(BillingClient.ProductType.INAPP).build());
-        productList.add(QueryProductDetailsParams.Product.newBuilder().setProductId("star_100000").setProductType(BillingClient.ProductType.INAPP).build());
-        productList.add(QueryProductDetailsParams.Product.newBuilder().setProductId("star_500000").setProductType(BillingClient.ProductType.INAPP).build());
-
-        QueryProductDetailsParams queryProductDetailsParams = QueryProductDetailsParams.newBuilder().setProductList(productList).build();
-
-        billingClient.queryProductDetailsAsync(queryProductDetailsParams, new ProductDetailsResponseListener() {
+        billingClient = BillingClient.newBuilder(getApplicationContext()).setListener(new PurchasesUpdatedListener() {
             @Override
-            public void onProductDetailsResponse(@NonNull BillingResult billingResult, @NonNull List<ProductDetails> list) {
+            public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
 
-
-                for(ProductDetails productDetails : list)
-                {
-
-                    if(productDetails.getProductId().equals(productIDList.get(0)))
-                    {
-                        Log.d("BILLINGTAG",productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice());
-                        SS_StarPrice1.setText(productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice());
-                        SS_MarketItem1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ImmutableList<BillingFlowParams.ProductDetailsParams> productDetailsParams =
-                                        ImmutableList.of(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(productDetails).build());
-
-                                BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder().setProductDetailsParamsList(productDetailsParams).build();
-                                billingClient.launchBillingFlow(StarStore.this, billingFlowParams);
-                            }
-                        });
-                    }
-                    else if(productDetails.getProductId().equals(productIDList.get(1)))
-                    {
-                        SS_StarPrice2.setText(productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice());
-                        SS_MarketItem2.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ImmutableList<BillingFlowParams.ProductDetailsParams> productDetailsParams =
-                                        ImmutableList.of(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(productDetails).build());
-
-                                BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder().setProductDetailsParamsList(productDetailsParams).build();
-                                billingClient.launchBillingFlow(StarStore.this, billingFlowParams);
-                            }
-                        });
-                    }
-                    else if(productDetails.getProductId().equals(productIDList.get(2)))
-                    {
-                        SS_StarPrice3.setText(productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice());
-                        SS_MarketItem3.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ImmutableList<BillingFlowParams.ProductDetailsParams> productDetailsParams =
-                                        ImmutableList.of(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(productDetails).build());
-
-                                BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder().setProductDetailsParamsList(productDetailsParams).build();
-                                billingClient.launchBillingFlow(StarStore.this, billingFlowParams);
-                            }
-                        });
-                    }
-                    else if(productDetails.getProductId().equals(productIDList.get(3)))
-                    {
-                        SS_StarPrice4.setText(productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice());
-                        SS_MarketItem4.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ImmutableList<BillingFlowParams.ProductDetailsParams> productDetailsParams =
-                                        ImmutableList.of(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(productDetails).build());
-
-                                BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder().setProductDetailsParamsList(productDetailsParams).build();
-                                billingClient.launchBillingFlow(StarStore.this, billingFlowParams);
-                            }
-                        });
-                    }
-                    else if(productDetails.getProductId().equals(productIDList.get(4)))
-                    {
-                        SS_StarPrice5.setText(productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice());
-                        SS_MarketItem5.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ImmutableList<BillingFlowParams.ProductDetailsParams> productDetailsParams =
-                                        ImmutableList.of(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(productDetails).build());
-
-                                BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder().setProductDetailsParamsList(productDetailsParams).build();
-                                billingClient.launchBillingFlow(StarStore.this, billingFlowParams);
-                            }
-                        });
-                    }
-                    else if(productDetails.getProductId().equals(productIDList.get(5)))
-                    {
-                        SS_StarPrice6.setText(productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice());
-                        SS_MarketItem6.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ImmutableList<BillingFlowParams.ProductDetailsParams> productDetailsParams =
-                                        ImmutableList.of(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(productDetails).build());
-
-                                BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder().setProductDetailsParamsList(productDetailsParams).build();
-                                billingClient.launchBillingFlow(StarStore.this, billingFlowParams);
-                            }
-                        });
-                    }
-
-                }
-                enable();
             }
-        });
+        }).enablePendingPurchases().build();
+        connectToGPlayBilling();
+    }
+
+    private void setProductInformation(TextView starPrice, TextView starAmount)
+    {
 
     }
 
 
-    /*{
-                        Log.d("BILLINGTAG",skuDetails.getPrice());
-                        if(skuDetails.getSku().equals(productIDs.get(0)))
-                        {
+    List<ProductDetails> currentProductDetails = null;
+    private void purchaseClick(int index)
+    {
+        List<BillingFlowParams.ProductDetailsParams> productDetailsParams = new ArrayList<>();
+        productDetailsParams.add(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(currentProductDetails.get(index)).build());
 
-                            SS_StarPrice1.setText(skuDetails.getOriginalPrice());
-                            SS_MarketItem1.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    billingClient.launchBillingFlow(StarStore.this, BillingFlowParams.newBuilder().setSkuDetails(skuDetails).build());
-                                }
-                            });
-                        }
-                        else if(skuDetails.getSku().equals(productIDs.get(1)))
+        BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder().setProductDetailsParamsList(productDetailsParams).build();
+        billingClient.launchBillingFlow(StarStore.this, billingFlowParams);
+    }
+
+    private void getStarsProductsDetails()
+    {
+
+        firebaseFirestore.collection("products").document("stars").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                ArrayList<ProductStar> productStarList = new ArrayList<>();
+                List<QueryProductDetailsParams.Product> productList = new ArrayList<>();
+                for(int i = 1; i <=6 ;i++)
+                {
+                    String keyTemplate = "star_" + i;
+                    Map<String,Object> productMap = (Map<String,Object>)documentSnapshot.get(keyTemplate);
+                    ProductStar currentProduct = new ProductStar((String)productMap.get("product_id"),((Long)productMap.get("star_amount")).intValue());
+                    productStarList.add(currentProduct);
+                    productList.add(QueryProductDetailsParams.Product.newBuilder().setProductId(currentProduct.getProductID()).setProductType(BillingClient.ProductType.INAPP).build());
+                }
+
+                QueryProductDetailsParams queryProductDetailsParams = QueryProductDetailsParams.newBuilder().setProductList(productList).build();
+
+                billingClient.queryProductDetailsAsync(queryProductDetailsParams, new ProductDetailsResponseListener() {
+                    @Override
+                    public void onProductDetailsResponse(@NonNull BillingResult billingResult, @NonNull List<ProductDetails> list) {
+                        if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK)
                         {
-                            SS_StarPrice2.setText(skuDetails.getOriginalPrice());
-                            SS_MarketItem2.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    billingClient.launchBillingFlow(StarStore.this, BillingFlowParams.newBuilder().setSkuDetails(skuDetails).build());
+                            currentProductDetails = list;
+                            for(ProductDetails productDetails : list)
+                            {
+                                String productID = productDetails.getProductId();
+                                String price = productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice();
+                                if(productID.equals(productStarList.get(0).getProductID()))
+                                {
+                                    SS_StarPrice1.setText(price);
+                                    SS_StarAmount1.setText(price);
                                 }
-                            });
-                        }
-                        else if(skuDetails.getSku().equals(productIDs.get(2)))
-                        {
-                            SS_StarPrice3.setText(skuDetails.getOriginalPrice());
-                            SS_MarketItem3.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    billingClient.launchBillingFlow(StarStore.this, BillingFlowParams.newBuilder().setSkuDetails(skuDetails).build());
+                                else if(productID.equals(productStarList.get(1).getProductID()))
+                                {
+
+                                    SS_StarPrice2.setText(price);
                                 }
-                            });
-                        }
-                        else if(skuDetails.getSku().equals(productIDs.get(3)))
-                        {
-                            SS_StarPrice4.setText(skuDetails.getOriginalPrice());
-                            SS_MarketItem4.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    billingClient.launchBillingFlow(StarStore.this, BillingFlowParams.newBuilder().setSkuDetails(skuDetails).build());
+                                else if(productID.equals(productStarList.get(2).getProductID()))
+                                {
+                                    SS_StarPrice3.setText(price);
+
                                 }
-                            });
-                        }
-                        else if(skuDetails.getSku().equals(productIDs.get(4)))
-                        {
-                            SS_StarPrice5.setText(skuDetails.getOriginalPrice());
-                            SS_MarketItem5.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    billingClient.launchBillingFlow(StarStore.this, BillingFlowParams.newBuilder().setSkuDetails(skuDetails).build());
+                                else if(productID.equals(productStarList.get(3).getProductID()))
+                                {
+                                    SS_StarPrice4.setText(price);
+
                                 }
-                            });
-                        }
-                        else if(skuDetails.getSku().equals(productIDs.get(5)))
-                        {
-                            SS_StarPrice6.setText(skuDetails.getOriginalPrice());
-                            SS_MarketItem6.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    billingClient.launchBillingFlow(StarStore.this, BillingFlowParams.newBuilder().setSkuDetails(skuDetails).build());
+                                else if(productID.equals(productStarList.get(4).getProductID()))
+                                {
+                                    SS_StarPrice5.setText(price);
+
                                 }
-                            });
+                                else if(productID.equals(productStarList.get(5).getProductID()))
+                                {
+                                    SS_StarPrice6.setText(price);
+                                }
+                            }
+
+                            enable();
+
                         }
-                    }*/
+
+
+                    }
+                });
+            }
+
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("BILLINGTAG",e.getMessage());
+            }
+        });
+
+
+
+    }
+
+
 
 
 }
