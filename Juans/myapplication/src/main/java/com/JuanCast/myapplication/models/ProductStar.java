@@ -24,4 +24,12 @@ public class ProductStar {
     public void setStarAmount(int starAmount) {
         this.starAmount = starAmount;
     }
+
+    @Override
+    public String toString() {
+        return "ProductStar{" +
+                "productID='" + productID + '\'' +
+                ", starAmount=" + starAmount +
+                '}';
+    }
 }

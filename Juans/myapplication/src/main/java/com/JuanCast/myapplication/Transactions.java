@@ -3,6 +3,7 @@ package com.JuanCast.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public class Transactions extends AppCompatActivity {
     private ImageView profile;
 
     private TextView ads;
+    private TextView t_purchasebutton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class Transactions extends AppCompatActivity {
         Store = findViewById(R.id.Store);
         Cast = findViewById(R.id.Cast);
         ads = findViewById(R.id.ads);
+        t_purchasebutton = findViewById(R.id.t_purchasebutton);
 
         fetchDataFromFirestore();
 
@@ -95,6 +98,12 @@ public class Transactions extends AppCompatActivity {
 
         ads.setOnClickListener(v -> {
             Intent intent = new Intent(Transactions.this, RewardActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
+        t_purchasebutton.setOnClickListener(v -> {
+            Intent intent = new Intent(Transactions.this, PurchaseTransactions.class);
             startActivity(intent);
             overridePendingTransition(0, 0); // No animation
         });
