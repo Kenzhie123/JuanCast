@@ -213,7 +213,7 @@ public class Powerups extends AppCompatActivity {
         cardViewAgimat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(PU_ActivePowerup.getText().toString().trim().isEmpty())
+                if(PU_ActivePowerup.getText().toString().equals("None"))
                 {
                     List<BillingFlowParams.ProductDetailsParams> productDetailsParams = new ArrayList<>();
                     productDetailsParams.add(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(agimatNiJuanProductDetail).build());
@@ -230,7 +230,7 @@ public class Powerups extends AppCompatActivity {
         cardViewApolaki.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(PU_ActivePowerup.getText().toString().trim().isEmpty())
+                if(PU_ActivePowerup.getText().toString().equals("None"))
                 {
                     List<BillingFlowParams.ProductDetailsParams> productDetailsParams = new ArrayList<>();
                     productDetailsParams.add(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(apolakiProductDetail).build());
