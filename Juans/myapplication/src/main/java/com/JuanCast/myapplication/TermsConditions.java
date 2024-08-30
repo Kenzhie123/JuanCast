@@ -10,7 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class PrivacyPolicy extends AppCompatActivity {
+public class TermsConditions extends AppCompatActivity {
 
     //navvar
     private ImageView Community;
@@ -24,7 +24,7 @@ public class PrivacyPolicy extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_privacy_policy);
+        setContentView(R.layout.activity_terms_conditions);
 
         home = findViewById(R.id.home);
         profile = findViewById(R.id.profile);
@@ -35,7 +35,7 @@ public class PrivacyPolicy extends AppCompatActivity {
         back = findViewById(R.id.back);
 
         back.setOnClickListener(v -> {
-            Intent intent = new Intent(PrivacyPolicy.this, Setting.class);
+            Intent intent = new Intent(TermsConditions.this, Setting.class);
             startActivity(intent);
             overridePendingTransition(0, 0); // No animation
         });
@@ -43,35 +43,34 @@ public class PrivacyPolicy extends AppCompatActivity {
         //navvar
 
         Community.setOnClickListener(v -> {
-            Intent intent = new Intent(PrivacyPolicy.this, PostActivity.class);
+            Intent intent = new Intent(TermsConditions.this, PostActivity.class);
             startActivity(intent);
             overridePendingTransition(0, 0); // No animation
         });
 
         Store.setOnClickListener(v -> {
-            Intent intent = new Intent(PrivacyPolicy.this, StarStore.class);
+            Intent intent = new Intent(TermsConditions.this, StarStore.class);
             startActivity(intent);
             overridePendingTransition(0, 0); // No animation
         });
 
         Cast.setOnClickListener(v -> {
-            Intent intent = new Intent(PrivacyPolicy.this, Voting.class);
+            Intent intent = new Intent(TermsConditions.this, Voting.class);
             startActivity(intent);
             overridePendingTransition(0, 0); // No animation
         });
 
         home.setOnClickListener(v -> {
-            Intent intent = new Intent(PrivacyPolicy.this, Homepage.class);
+            Intent intent = new Intent(TermsConditions.this, Homepage.class);
             startActivity(intent);
             overridePendingTransition(0, 0); // No animation
         });
 
         profile.setOnClickListener(v -> {
-            Intent intent = new Intent(PrivacyPolicy.this, Profile.class);
+            Intent intent = new Intent(TermsConditions.this, Profile.class);
             startActivity(intent);
             overridePendingTransition(0, 0); // No animation
         });
-
     }
 
     @Override

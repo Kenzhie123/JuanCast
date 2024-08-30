@@ -223,10 +223,10 @@
                 android:orientation="horizontal">
 
                 <CheckBox
+                android:gravity="start"
                     android:id="@+id/terms"
-                    android:layout_marginTop="-29dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:textColor="@color/white"
                     android:theme="@style/MycheckBox"
                     android:fontFamily="@font/montserrat_regular"/>

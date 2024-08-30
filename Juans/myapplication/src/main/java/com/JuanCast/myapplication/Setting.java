@@ -54,6 +54,21 @@ public class Setting extends AppCompatActivity {
     private LinearLayout privacy4;
     private ImageView privacy5;
 
+    //terms
+    private LinearLayout terms1;
+    private ImageView terms2;
+    private TextView terms3;
+    private LinearLayout terms4;
+    private ImageView terms5;
+
+
+    //terms
+    private LinearLayout share1;
+    private ImageView share2;
+    private TextView share3;
+    private LinearLayout share4;
+    private ImageView share5;
+
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
@@ -161,6 +176,88 @@ public class Setting extends AppCompatActivity {
             overridePendingTransition(0, 0); // No animation
         });
 
+        //terms
+        terms1 = findViewById(R.id.Terms1);
+        terms2 = findViewById(R.id.Terms2);
+        terms3 = findViewById(R.id.Terms3);
+        terms4 = findViewById(R.id.Terms4);
+        terms5 = findViewById(R.id.Terms5);
+
+        //terms
+        terms1.setOnClickListener(v -> {
+            Intent intent = new Intent(Setting.this, TermsConditions.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
+        terms2.setOnClickListener(v -> {
+            Intent intent = new Intent(Setting.this, TermsConditions.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
+        terms3.setOnClickListener(v -> {
+            Intent intent = new Intent(Setting.this, TermsConditions.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
+        terms4.setOnClickListener(v -> {
+            Intent intent = new Intent(Setting.this, TermsConditions.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
+        terms5.setOnClickListener(v -> {
+            Intent intent = new Intent(Setting.this, TermsConditions.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
+        //share
+        share1 = findViewById(R.id.share1);
+        share2 = findViewById(R.id.share2);
+        share3 = findViewById(R.id.share3);
+        share4 = findViewById(R.id.share4);
+        share5 = findViewById(R.id.share5);
+
+
+        share1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareLink("https://juancast.ph/");
+            }
+        });
+
+        share2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareLink("https://juancast.ph/");
+            }
+        });
+
+        share3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareLink("https://juancast.ph/");
+            }
+        });
+
+
+        share4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareLink("https://juancast.ph/");
+            }
+        });
+
+        share5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareLink("https://juancast.ph/");
+            }
+        });
+
 
 
 
@@ -203,6 +300,14 @@ public class Setting extends AppCompatActivity {
                 showConfirmationDialog();
             }
         });
+    }
+
+
+    private void shareLink(String url) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+        startActivity(Intent.createChooser(shareIntent, "Share link via"));
     }
 
     @Override

@@ -47,12 +47,14 @@ public class ads extends AppCompatActivity {
     private static final String TAG = "ads";
     private FirebaseFirestore firebaseFirestore;
     private  ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    private Map<Integer, Integer> adCountsMap = new HashMap<>();
 
-    private static final long AD_COOLDOWN_MILLIS = 60000; // 1 minute cooldown
-    private static final String PREF_LAST_AD_TIME = "lastAdTime";
     private Handler handler = new Handler(Looper.getMainLooper());
 
+
+    //*************** Cool Down Timer **********************************************
+    private static final long AD_COOLDOWN_MILLIS = 60000; // 1 minute cooldown
+    private Map<Integer, Integer> adCountsMap = new HashMap<>();
+    private SharedPreferences sharedPreferences;
     private Handler cooldownHandler = new Handler();
     private Runnable cooldownRunnable;
 
@@ -62,7 +64,6 @@ public class ads extends AppCompatActivity {
     private static final long COOLDOWN_PERIOD_MILLIS = TimeUnit.MINUTES.toMillis(1); // 1 minute cooldown
 
 
-    private SharedPreferences sharedPreferences;
 
     private TextView tvAvailableStars;
     private TextView tvAdsWheelsCount;
@@ -94,9 +95,9 @@ public class ads extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ads);
+        sharedPreferences = getSharedPreferences("AdPreferences", MODE_PRIVATE);
 
         ImageView logo = findViewById(R.id.logo);
-
         tvAdsCpCount = findViewById(R.id.tvAdsCpCount);
         tvAdsWheelsCount = findViewById(R.id.tvAdsWheelsCount);
         tvAdsPuzzleCount = findViewById(R.id.tvAdsPuzzleCount);
@@ -105,10 +106,6 @@ public class ads extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
-
-
-        restoreAndDisplayCooldownTimers();
-
 
 
 
@@ -214,34 +211,56 @@ public class ads extends AppCompatActivity {
             loadInterstitialAd(R.id.ButtonStar, "ca-app-pub-6114080410158173/3195974826");
         });
 
-        // Scheduler initialization
-        scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduleDailyReset(this::resetAllAdCounts, 0, 0); // 0 hours and 0 minutes (midnight)
+        restoreAndDisplayCooldownTimers();
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        sharedPreferences = getSharedPreferences("YourSharedPrefs", MODE_PRIVATE);
+        scheduler = Executors.newScheduledThreadPool(1);
+        scheduleDailyReset();
 
 
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (scheduler != null) {
-            scheduler.shutdown();
-        }
+    private void fetchAdCountsFromFirestore(String userId, int imageViewId) {
+        firebaseFirestore.collection("AdCounts")
+                .document(userId + "_" + imageViewId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Long adCountLong = documentSnapshot.getLong("adCount");
+                        if (adCountLong != null) {
+                            int adCount = adCountLong.intValue();
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt("ad_count_" + userId + "_" + imageViewId, adCount);
+                            editor.apply();
+                            updateAdCountTextView(imageViewId);
+                        }
+                    } else {
+                        // If document does not exist, initialize it
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("ad_count_" + userId + "_" + imageViewId, 0);
+                        editor.apply();
+                        updateAdCountTextView(imageViewId);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error fetching ad count: " + e.getMessage());
+                });
     }
 
+    //***************************************Pag Reset ng AdCount**********************************************************
 
-    // Schedule a task to run daily at a specified time
-    private void scheduleDailyReset(Runnable task, int hourOfDay, int minuteOfHour) {
-        long initialDelay = getInitialDelay(hourOfDay, minuteOfHour);
-        long period = TimeUnit.DAYS.toMillis(1); // 24 hours in milliseconds
+    private void scheduleDailyReset() {
+        Runnable resetTask = this::resetAllAdCounts;
 
-        Log.d(TAG, "Scheduling task with initial delay: " + initialDelay + " milliseconds");
+        long initialDelay = getInitialDelayForDailyReset(0, 0); // Schedule for midnight
 
-        scheduler.scheduleAtFixedRate(task, initialDelay, period, TimeUnit.MILLISECONDS);
+        // Schedule the task to run daily after the initial delay
+        scheduler.scheduleAtFixedRate(resetTask, initialDelay, TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
     }
 
-    private long getInitialDelay(int hourOfDay, int minuteOfHour) {
+    private long getInitialDelayForDailyReset(int hourOfDay, int minuteOfHour) {
         Calendar now = Calendar.getInstance();
         Calendar nextRun = Calendar.getInstance();
 
@@ -258,17 +277,16 @@ public class ads extends AppCompatActivity {
         return nextRun.getTimeInMillis() - now.getTimeInMillis();
     }
 
-
-
-    // Reset all ad counts
     private void resetAllAdCounts() {
         Log.d(TAG, "Resetting all ad counts at: " + new Date().toString());
+
         firebaseFirestore.collection("AdCounts")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            resetAdCountForDocument(document);
+                            String userId = document.getString("userId");
+                            resetAdCountForUser(userId);
                         }
                     } else {
                         Log.e(TAG, "Error retrieving documents: " + task.getException());
@@ -276,14 +294,20 @@ public class ads extends AppCompatActivity {
                 });
     }
 
-
-    // Reset the ad count for each document in Firestore
-    private void resetAdCountForDocument(DocumentSnapshot document) {
-        String userId = document.getString("userId");
-        int imageViewId = document.getLong("imageViewId").intValue();
-
-        // Reset ad count to 0
-        updateAdCountsInFirestore(userId, imageViewId, 0);
+    private void resetAdCountForUser(String userId) {
+        firebaseFirestore.collection("AdCounts")
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            int imageViewId = document.getLong("imageViewId").intValue();
+                            updateAdCountsInFirestore(userId, imageViewId, 0);
+                        }
+                    } else {
+                        Log.e(TAG, "Error retrieving documents for user " + userId + ": " + task.getException());
+                    }
+                });
     }
 
     private void updateAdCountsInFirestore(String userId, int imageViewId, int adCount) {
@@ -296,9 +320,20 @@ public class ads extends AppCompatActivity {
         firebaseFirestore.collection("AdCounts")
                 .document(userId + "_" + imageViewId)
                 .set(adCountData)
-                .addOnSuccessListener(documentReference -> Log.d(TAG, "Ad count na-update nang matagumpay"))
-                .addOnFailureListener(e -> Log.e(TAG, "Error sa pag-update ng ad count: " + e.getMessage()));
+                .addOnSuccessListener(documentReference -> Log.d(TAG, "Ad count successfully updated for user " + userId))
+                .addOnFailureListener(e -> Log.e(TAG, "Error updating ad count for user " + userId + ": " + e.getMessage()));
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (scheduler != null) {
+            scheduler.shutdown(); // Ensure proper shutdown of the scheduler
+        }
+    }
+
+
+    //*************************************************************************************************
 
 
     // Load and set up ads for each ImageView
@@ -321,12 +356,14 @@ public class ads extends AppCompatActivity {
 
 
 
+//********************************Cool Down*********************************************************
+
+
+
     private void initializeImageView(int imageViewId, InterstitialAd ad) {
         ImageView imageView = findViewById(imageViewId);
         adCountsMap.put(imageViewId, 0);
 
-        // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("AdPreferences", MODE_PRIVATE);
 
         imageView.setOnClickListener(view -> {
             long currentTime = System.currentTimeMillis();
@@ -352,8 +389,6 @@ public class ads extends AppCompatActivity {
 
                                 // Update cooldown TextView
                                 updateCooldownTextView(imageViewId);
-                                // Start periodic updates
-                                startCooldownUpdates(imageViewId);
                             }
 
                             @Override
@@ -365,27 +400,32 @@ public class ads extends AppCompatActivity {
 
                             @Override
                             public void onAdShowedFullScreenContent() {
-                                // Optional: You can implement actions here when the ad starts showing
+                                // Optional: Implement actions here when the ad starts showing
                             }
                         });
 
-                        ad.show(ads.this);
+                        ad.show(this);
                     } else {
                         Log.d(TAG, "The interstitial ad wasn't ready yet for ImageView ID: " + imageViewId);
                         showCustomToast("Ads loading, please wait.", R.drawable.juanscast);
                         loadInterstitialAd(imageViewId, ad.getAdUnitId()); // Optionally reload ad
                     }
                 } else {
-                    showCustomToast("You need to wait 1 minute before watching another ad.", R.drawable.juanscast);
+                    showCustomToast("You need to wait cooldown before watching another ad.", R.drawable.juanscast);
                 }
 
                 updateAdCountTextView(imageViewId);
             } else {
-                showCustomToast("You need to wait 1 minute before watching another ad.", R.drawable.juanscast);
+                showCustomToast("You need to wait cooldown before watching another ad.", R.drawable.juanscast);
             }
         });
     }
 
+    private void saveCooldownState(int imageViewId, long remainingTime) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(getRemainingCooldownKey(imageViewId), remainingTime);
+        editor.apply();
+    }
 
     private void updateCooldownTextView(int imageViewId) {
         TextView cooldownTextView = getCooldownTextView(imageViewId);
@@ -394,10 +434,10 @@ public class ads extends AppCompatActivity {
             long lastAdTime = sharedPreferences.getLong(getLastAdTimeKey(imageViewId), 0);
             long timeRemaining = AD_COOLDOWN_MILLIS - (currentTime - lastAdTime);
 
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putLong(getRemainingCooldownKey(imageViewId), timeRemaining);
-            editor.apply();
+            // Save the updated cooldown state
+            saveCooldownState(imageViewId, timeRemaining);
 
+            // Update the TextView
             if (timeRemaining > 0) {
                 long minutes = timeRemaining / 60000;
                 long seconds = (timeRemaining % 60000) / 1000;
@@ -406,6 +446,13 @@ public class ads extends AppCompatActivity {
             } else {
                 cooldownTextView.setText("Cooldown: 00:00");
             }
+        }
+    }
+
+    private void restoreAndDisplayCooldownTimers() {
+        for (int id : adCountsMap.keySet()) {
+            restoreCooldownState(id);
+            startCooldownUpdates(id);
         }
     }
 
@@ -424,7 +471,6 @@ public class ads extends AppCompatActivity {
         }
     }
 
-
     private TextView getCooldownTextView(int imageViewId) {
         if (imageViewId == R.id.ButtonCp) {
             return findViewById(R.id.tvCooldownCp);
@@ -441,16 +487,6 @@ public class ads extends AppCompatActivity {
     private String getRemainingCooldownKey(int imageViewId) {
         return "RemainingCooldown_" + imageViewId;
     }
-
-    private void restoreAndDisplayCooldownTimers() {
-        for (int id : adCountsMap.keySet()) {
-            restoreCooldownState(id);
-            startCooldownUpdates(id); // Start the periodic updates for the cooldown
-        }
-    }
-
-
-
 
     private void startCooldownUpdates(final int imageViewId) {
         cooldownRunnable = new Runnable() {
@@ -469,11 +505,9 @@ public class ads extends AppCompatActivity {
         }
     }
 
-
     private String getLastAdTimeKey(int imageViewId) {
         return "LastAdTime_" + imageViewId;
     }
-
 
 
     @Override
@@ -488,13 +522,14 @@ public class ads extends AppCompatActivity {
             fetchAdCountsFromFirestore(currentUserId, R.id.ButtonStar);
         }
 
-        for (int id : adCountsMap.keySet()) {
-            restoreCooldownState(id);
-            startCooldownUpdates(id);
-        }
+        restoreAndDisplayCooldownTimers();
+        startCooldownUpdates(R.id.ButtonCp);
+        startCooldownUpdates(R.id.ButtonWheels);
+        startCooldownUpdates(R.id.ButtonPuzzle);
+        startCooldownUpdates(R.id.ButtonStar);
     }
 
-
+//*****************************************************************************************************
 
     private void showCustomToast(String message, int imageResId) {
 
@@ -584,31 +619,7 @@ public class ads extends AppCompatActivity {
 
 
 
-    private void fetchAdCountsFromFirestore(String userId, int imageViewId) {
-        firebaseFirestore.collection("AdCounts")
-                .document(userId + "_" + imageViewId)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        Integer adCount = documentSnapshot.getLong("adCount").intValue();
-                        if (adCount != null) {
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putInt("ad_count_" + userId + "_" + imageViewId, adCount);
-                            editor.apply();
-                            updateAdCountTextView(imageViewId);
-                        }
-                    } else {
-                        // If document does not exist, initialize it
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt("ad_count_" + userId + "_" + imageViewId, 0);
-                        editor.apply();
-                        updateAdCountTextView(imageViewId);
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching ad count: " + e.getMessage());
-                });
-    }
+
 
 
 
