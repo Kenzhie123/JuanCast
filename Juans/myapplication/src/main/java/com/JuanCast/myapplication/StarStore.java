@@ -24,6 +24,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.JuanCast.myapplication.Receiver.StarChangeReceiver;
 import com.JuanCast.myapplication.models.ProductStar;
+import com.JuanCast.myapplication.models.ServerTime;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
@@ -44,6 +45,12 @@ import com.google.common.collect.ImmutableList;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -62,6 +69,7 @@ public class StarStore extends AppCompatActivity {
 
 
     private FirebaseFirestore firebaseFirestore;
+    private FirebaseDatabase firebaseDatabase;
     private FirebaseAuth auth;
     private FirebaseUser user;
     private String currentUserId;
@@ -116,7 +124,6 @@ public class StarStore extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,11 +132,13 @@ public class StarStore extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance(); // Initialize FirebaseAuth instance
         firebaseFirestore = FirebaseFirestore.getInstance(); // Initialize FirebaseFirestore instance
+        firebaseDatabase = FirebaseDatabase.getInstance();
         user = auth.getCurrentUser();
         currentUserId = user.getUid();
 
         available_stars = findViewById(R.id.available_stars);
         loadStarPoints(currentUserId, available_stars); // Pass currentUserId to loadUserName method
+
 
         SS_MarketItem1 = findViewById(R.id.SS_MarketItem1);
         SS_MarketItem2 = findViewById(R.id.SS_MarketItem2);
@@ -138,22 +147,20 @@ public class StarStore extends AppCompatActivity {
         SS_MarketItem5 = findViewById(R.id.SS_MarketItem5);
         SS_MarketItem6 = findViewById(R.id.SS_MarketItem6);
         SS_StarAmount1 = findViewById(R.id.SS_StarAmount1);
-        SS_StarPrice1= findViewById(R.id.SS_StarPrice1);
-        SS_StarAmount2= findViewById(R.id.SS_StarAmount2);
-        SS_StarPrice2= findViewById(R.id.SS_StarPrice2);
-        SS_StarAmount3= findViewById(R.id.SS_StarAmount3);
-        SS_StarPrice3= findViewById(R.id.SS_StarPrice3);
-        SS_StarAmount4= findViewById(R.id.SS_StarAmount4);
-        SS_StarPrice4= findViewById(R.id.SS_StarPrice4);
-        SS_StarAmount5= findViewById(R.id.SS_StarAmount5);
-        SS_StarPrice5= findViewById(R.id.SS_StarPrice5);
-        SS_StarAmount6= findViewById(R.id.SS_StarAmount6);
-        SS_StarPrice6= findViewById(R.id.SS_StarPrice6);
-        SS_Overlay= findViewById(R.id.SS_Overlay);
-        SS_ProgressBar= findViewById(R.id.SS_ProgressBar);
-        SS_OverlayContainer= findViewById(R.id.SS_OverlayContainer);
-
-
+        SS_StarPrice1 = findViewById(R.id.SS_StarPrice1);
+        SS_StarAmount2 = findViewById(R.id.SS_StarAmount2);
+        SS_StarPrice2 = findViewById(R.id.SS_StarPrice2);
+        SS_StarAmount3 = findViewById(R.id.SS_StarAmount3);
+        SS_StarPrice3 = findViewById(R.id.SS_StarPrice3);
+        SS_StarAmount4 = findViewById(R.id.SS_StarAmount4);
+        SS_StarPrice4 = findViewById(R.id.SS_StarPrice4);
+        SS_StarAmount5 = findViewById(R.id.SS_StarAmount5);
+        SS_StarPrice5 = findViewById(R.id.SS_StarPrice5);
+        SS_StarAmount6 = findViewById(R.id.SS_StarAmount6);
+        SS_StarPrice6 = findViewById(R.id.SS_StarPrice6);
+        SS_Overlay = findViewById(R.id.SS_Overlay);
+        SS_ProgressBar = findViewById(R.id.SS_ProgressBar);
+        SS_OverlayContainer = findViewById(R.id.SS_OverlayContainer);
 
 
         logo.setOnClickListener(new View.OnClickListener() {
@@ -217,6 +224,7 @@ public class StarStore extends AppCompatActivity {
                 Intent intent = new Intent(StarStore.this, Store.class);
                 startActivity(intent);
                 overridePendingTransition(0, 0); // Walang animation
+                finish();
             }
         });
 
@@ -227,6 +235,7 @@ public class StarStore extends AppCompatActivity {
                 Intent intent = new Intent(StarStore.this, ads.class);
                 startActivity(intent);
                 overridePendingTransition(0, 0); // Walang animation
+                finish();
             }
         });
 
@@ -237,6 +246,7 @@ public class StarStore extends AppCompatActivity {
                 Intent intent = new Intent(StarStore.this, Powerups.class);
                 startActivity(intent);
                 overridePendingTransition(0, 0); // Walang animation
+                finish();
             }
         });
 
@@ -294,7 +304,6 @@ public class StarStore extends AppCompatActivity {
         });
 
 
-
     }
 
     @Override
@@ -340,200 +349,185 @@ public class StarStore extends AppCompatActivity {
                 });
     }
 
-    public void enable()
-    {
+    public void enable() {
         SS_OverlayContainer.setVisibility(View.GONE);
     }
 
-    public void disable()
-    {
+    public void disable() {
         SS_OverlayContainer.setVisibility(View.VISIBLE);
     }
 
-    private void updateStarCount(int count)
-    {
+
+    private void updateStarCount(int count) {
         available_stars.setText(String.valueOf(count));
     }
 
-    private void connectToGPlayBilling()
-    {
+    private void connectToGPlayBilling() {
         disable();
 
         billingClient.startConnection(
                 new BillingClientStateListener() {
                     @Override
                     public void onBillingServiceDisconnected() {
-                        Log.d("BILLINGTAG","DISCONNECTED");
+                        Log.d("BILLINGTAG", "DISCONNECTED");
                         connectToGPlayBilling();
 
                     }
 
                     @Override
                     public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
-                        if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK)
-                        {
+                        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
 
                             getStarsProductsDetails();
-                        }
-                        else
-                        {
-                            Toast.makeText(getApplicationContext(),billingResult.getDebugMessage(),Toast.LENGTH_LONG).show();
-                            Log.d("BILLINGTAG","FAILED");
+                        } else {
+                            Toast.makeText(getApplicationContext(), billingResult.getDebugMessage(), Toast.LENGTH_LONG).show();
+                            Log.d("BILLINGTAG", "FAILED");
                         }
                     }
                 }
         );
     }
 
-    private void initBilling()
-    {
+    private void initBilling() {
         billingClient = BillingClient.newBuilder(getApplicationContext()).setListener(new PurchasesUpdatedListener() {
             @Override
             public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
-                if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && list != null)
-                {
-                    for(Purchase purchase : list)
-                    {
-
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && list != null) {
+                    for (Purchase purchase : list) {
                         handlePurchase(purchase);
                     }
-                }
-                else if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.USER_CANCELED)
-                {
+                } else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.USER_CANCELED) {
 //                    Toast.makeText(getApplicationContext(),"You canceled your purchase",Toast.LENGTH_LONG).show();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(),"Unexpected Error",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Unexpected Error", Toast.LENGTH_LONG).show();
                 }
             }
         }).enablePendingPurchases().build();
         connectToGPlayBilling();
     }
 
-    private void handlePurchase(Purchase purchase)
-    {
+    private void handlePurchase(Purchase purchase) {
         ConsumeParams consumeParams = ConsumeParams.newBuilder().setPurchaseToken(purchase.getPurchaseToken()).build();
 
         ConsumeResponseListener listener = new ConsumeResponseListener() {
             @Override
             public void onConsumeResponse(@NonNull BillingResult billingResult, @NonNull String s) {
-                if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK)
-                {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
                     updateUserPurchase(purchase.getProducts());
+                } else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.USER_CANCELED) {
+                    Toast.makeText(getApplicationContext(), "You canceled your purchase", Toast.LENGTH_LONG).show();
+                } else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.SERVICE_DISCONNECTED) {
+                    Toast.makeText(getApplicationContext(), "You lost your connection", Toast.LENGTH_LONG).show();
                 }
             }
         };
 
-        billingClient.consumeAsync(consumeParams,listener);
+        billingClient.consumeAsync(consumeParams, listener);
     }
 
-    private void updateUserPurchase(List<String> productIDs)
-    {
+    private void updateUserPurchase(List<String> productIDs) {
         //Get current star amount depending on product ID
         firebaseFirestore.collection("products").document("stars")
-                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Map<String, Object> data = documentSnapshot.getData();
-                        long totalStarPurchased = 0;
+                        new ServerTime().addOnSuccessListener(new ServerTime.ServerTimeSuccessListener<Date>() {
+                            @Override
+                            public void onSuccess(Date serverTime) {
+                                Map<String, Object> data = documentSnapshot.getData();
+                                long totalStarPurchased = 0;
 
-                        String productIds = "";
-                        for(String id : productIDs)
-                        {
-                            for(Map.Entry<String,Object> products : data.entrySet())
-                            {
-                                Map<String,Object> productAttributes = (Map<String, Object>) products.getValue();
-                                if(productAttributes.get("product_id").equals(id))
-                                {
-                                    totalStarPurchased += (Long) productAttributes.get("star_amount");
-                                    productIds += (productIds.equals("") ? id : ","+id );
+                                String productIds = "";
+                                for (String id : productIDs) {
+                                    for (Map.Entry<String, Object> products : data.entrySet()) {
+                                        Map<String, Object> productAttributes = (Map<String, Object>) products.getValue();
+                                        if (productAttributes.get("product_id").equals(id)) {
+                                            totalStarPurchased += (Long) productAttributes.get("star_amount");
+                                            productIds += (productIds.equals("") ? id : "," + id);
+                                        }
+
+                                    }
+
                                 }
 
+                                Map<String, Object> transactHistoryAdd = new HashMap<>();
+                                transactHistoryAdd.put("reference_number", productIds);
+                                transactHistoryAdd.put("star", totalStarPurchased);
+                                transactHistoryAdd.put("sun", 0);
+                                transactHistoryAdd.put("timestamp", new Timestamp(serverTime));
+                                transactHistoryAdd.put("transaction_type", "star_purchase");
+                                transactHistoryAdd.put("amount_charged", getPriceFromProductID(productIds));
+                                transactHistoryAdd.put("user_id", currentUserId);
+                                firebaseFirestore.collection("transaction_history").add(transactHistoryAdd)
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            @Override
+                                            public void onSuccess(DocumentReference documentReference) {
+                                                Log.d("TRANSACTIONTAG", documentReference.getId());
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
+                                //Update user star amount
+                                int currentTotalStars = Integer.parseInt(available_stars.getText().toString());
+                                Map<String, Object> starUpdate = new HashMap<>();
+                                starUpdate.put("votingPoints", (currentTotalStars + totalStarPurchased));
+                                long finalTotalStarPurchased = totalStarPurchased;
+                                firebaseFirestore.collection("User")
+                                        .document(currentUserId)
+                                        .update(starUpdate)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Toast.makeText(getApplicationContext(), "Purchased successful", Toast.LENGTH_LONG).show();
+                                                updateStarCount((int) (currentTotalStars + finalTotalStarPurchased));
+
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
+
                             }
-
-                        }
-
-                        Date dateNow = Calendar.getInstance().getTime();
-                        Map<String,Object> transactHistoryAdd = new HashMap<>();
-                        transactHistoryAdd.put("reference_number",productIds);
-                        transactHistoryAdd.put("star",totalStarPurchased);
-                        transactHistoryAdd.put("sun",0);
-                        transactHistoryAdd.put("timestamp",new Timestamp(dateNow));
-                        transactHistoryAdd.put("transaction_type","star_purchase");
-                        transactHistoryAdd.put("amount_charged",getPriceFromProductID(productIds));
-                        transactHistoryAdd.put("user_id",currentUserId);
-                        firebaseFirestore.collection("transaction_history").add(transactHistoryAdd)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                         Log.d("TRANSACTIONTAG",documentReference.getId());
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(getApplicationContext(),"Error:" + e.getMessage(),Toast.LENGTH_LONG).show();
-                                    }
-                                });
-
-                        //Update user star amount
-                        int currentTotalStars = Integer.parseInt(available_stars.getText().toString());
-                        Map<String,Object> starUpdate = new HashMap<>();
-                        starUpdate.put("votingPoints",(currentTotalStars +totalStarPurchased));
-                        long finalTotalStarPurchased = totalStarPurchased;
-                        firebaseFirestore.collection("User")
-                                .document(currentUserId)
-                                .update(starUpdate)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        Toast.makeText(getApplicationContext(),"Purchased successful",Toast.LENGTH_LONG).show();
-                                        updateStarCount((int) (currentTotalStars + finalTotalStarPurchased));
-
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(getApplicationContext(),"Error:" + e.getMessage(),Toast.LENGTH_LONG).show();
-                                    }
-                                });
-
-
+                        });
                     }
                 });
 
     }
 
-    private void setProductInformation(TextView starPrice, TextView starAmount,String price, String amount)
-    {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                starPrice.setText(price);
-                starAmount.setText(amount);
-            }
-        }).start();
+    private void setProductInformation(TextView starPrice, TextView starAmount, String price, String amount) {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        }).start();
+        starPrice.setText(price);
+        starAmount.setText(amount);
     }
 
 
     List<ProductDetails> currentProductDetails = null;
-    private String getPriceFromProductID(String productID)
-    {
-        for(ProductDetails productDetail : currentProductDetails)
-        {
-            if(productDetail.getProductId().equals(productID))
-            {
+
+    private String getPriceFromProductID(String productID) {
+        for (ProductDetails productDetail : currentProductDetails) {
+            if (productDetail.getProductId().equals(productID)) {
                 return productDetail.getOneTimePurchaseOfferDetails().getFormattedPrice();
             }
         }
 
         return "0";
     }
-    private void purchaseClick(int index)
-    {
 
-        Log.d("BILLINGTAG","CLICKED");
+    private void purchaseClick(int index) {
+
         List<BillingFlowParams.ProductDetailsParams> productDetailsParams = new ArrayList<>();
         productDetailsParams.add(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(currentProductDetails.get(index)).build());
 
@@ -541,88 +535,68 @@ public class StarStore extends AppCompatActivity {
         billingClient.launchBillingFlow(StarStore.this, billingFlowParams);
     }
 
-    private void getStarsProductsDetails()
-    {
+    private void getStarsProductsDetails() {
 
         firebaseFirestore.collection("products").document("stars").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                ArrayList<ProductStar> productStarList = new ArrayList<>();
-                List<QueryProductDetailsParams.Product> productList = new ArrayList<>();
-                for(int i = 1; i <=6 ;i++)
-                {
-                    String keyTemplate = "star_" + i;
-                    Map<String,Object> productMap = (Map<String,Object>)documentSnapshot.get(keyTemplate);
-                    ProductStar currentProduct = new ProductStar((String)productMap.get("product_id"),((Long)productMap.get("star_amount")).intValue());
-                    productStarList.add(currentProduct);
-
-                    productList.add(QueryProductDetailsParams.Product.newBuilder().setProductId(currentProduct.getProductID()).setProductType(BillingClient.ProductType.INAPP).build());
-                }
-
-                QueryProductDetailsParams queryProductDetailsParams = QueryProductDetailsParams.newBuilder().setProductList(productList).build();
-                billingClient.queryProductDetailsAsync(queryProductDetailsParams, new ProductDetailsResponseListener() {
                     @Override
-                    public void onProductDetailsResponse(@NonNull BillingResult billingResult, @NonNull List<ProductDetails> list) {
-                        if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK)
-                        {
-                            currentProductDetails = list;
-                            for(ProductDetails productDetails : list)
-                            {
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        ArrayList<ProductStar> productStarList = new ArrayList<>();
+                        List<QueryProductDetailsParams.Product> productList = new ArrayList<>();
+                        for (int i = 1; i <= 6; i++) {
+                            String keyTemplate = "star_" + i;
+                            Map<String, Object> productMap = (Map<String, Object>) documentSnapshot.get(keyTemplate);
+                            ProductStar currentProduct = new ProductStar((String) productMap.get("product_id"), ((Long) productMap.get("star_amount")).intValue());
+                            productStarList.add(currentProduct);
 
-                                String productID = productDetails.getProductId();
-                                String price = productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice();
-                                if(productID.equals(productStarList.get(0).getProductID()))
-                                {
-                                    setProductInformation(SS_StarPrice1,SS_StarAmount1,price,String.valueOf(productStarList.get(0).getStarAmount()));
+                            productList.add(QueryProductDetailsParams.Product.newBuilder().setProductId(currentProduct.getProductID()).setProductType(BillingClient.ProductType.INAPP).build());
+                        }
+
+                        QueryProductDetailsParams queryProductDetailsParams = QueryProductDetailsParams.newBuilder().setProductList(productList).build();
+                        billingClient.queryProductDetailsAsync(queryProductDetailsParams, new ProductDetailsResponseListener() {
+                            @Override
+                            public void onProductDetailsResponse(@NonNull BillingResult billingResult, @NonNull List<ProductDetails> list) {
+                                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                                    currentProductDetails = list;
+                                    for (ProductDetails productDetails : list) {
+
+                                        String productID = productDetails.getProductId();
+                                        String price = productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice();
+                                        if (productID.equals(productStarList.get(0).getProductID())) {
+                                            setProductInformation(SS_StarPrice1, SS_StarAmount1, price, String.valueOf(productStarList.get(0).getStarAmount()));
+                                        } else if (productID.equals(productStarList.get(1).getProductID())) {
+                                            setProductInformation(SS_StarPrice2, SS_StarAmount2, price, String.valueOf(productStarList.get(1).getStarAmount()));
+                                        } else if (productID.equals(productStarList.get(2).getProductID())) {
+                                            setProductInformation(SS_StarPrice3, SS_StarAmount3, price, String.valueOf(productStarList.get(2).getStarAmount()));
+                                        } else if (productID.equals(productStarList.get(3).getProductID())) {
+                                            setProductInformation(SS_StarPrice4, SS_StarAmount4, price, String.valueOf(productStarList.get(3).getStarAmount()));
+                                        } else if (productID.equals(productStarList.get(4).getProductID())) {
+                                            setProductInformation(SS_StarPrice5, SS_StarAmount5, price, String.valueOf(productStarList.get(4).getStarAmount()));
+                                        } else if (productID.equals(productStarList.get(5).getProductID())) {
+                                            setProductInformation(SS_StarPrice6, SS_StarAmount6, price, String.valueOf(productStarList.get(5).getStarAmount()));
+                                        }
+                                    }
+
+                                    enable();
+
+                                } else {
+                                    Log.d("BILLINGTAG", billingResult.getDebugMessage());
                                 }
-                                else if(productID.equals(productStarList.get(1).getProductID()))
-                                {
-                                    setProductInformation(SS_StarPrice2,SS_StarAmount2,price,String.valueOf(productStarList.get(1).getStarAmount()));
-                                }
-                                else if(productID.equals(productStarList.get(2).getProductID()))
-                                {
-                                    setProductInformation(SS_StarPrice3,SS_StarAmount3,price,String.valueOf(productStarList.get(2).getStarAmount()));
-                                }
-                                else if(productID.equals(productStarList.get(3).getProductID()))
-                                {
-                                    setProductInformation(SS_StarPrice4,SS_StarAmount4,price,String.valueOf(productStarList.get(3).getStarAmount()));
-                                }
-                                else if(productID.equals(productStarList.get(4).getProductID()))
-                                {
-                                    setProductInformation(SS_StarPrice5,SS_StarAmount5,price,String.valueOf(productStarList.get(4).getStarAmount()));
-                                }
-                                else if(productID.equals(productStarList.get(5).getProductID()))
-                                {
-                                    setProductInformation(SS_StarPrice6,SS_StarAmount6,price,String.valueOf(productStarList.get(5).getStarAmount()));
-                                }
+
+
                             }
+                        });
+                    }
 
-                            enable();
-
-                        }
-                        else
-                        {
-                            Log.d("BILLINGTAG",billingResult.getDebugMessage());
-                        }
-
-
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("BILLINGTAG", e.getMessage());
                     }
                 });
-            }
-
-        })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("BILLINGTAG",e.getMessage());
-            }
-        });
-
 
 
     }
-
-
 
 
 }

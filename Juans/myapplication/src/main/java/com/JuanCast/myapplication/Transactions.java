@@ -114,12 +114,14 @@ public class Transactions extends AppCompatActivity {
         String userId = firebaseAuth.getCurrentUser().getUid();
 
         firebaseFirestore.collection("transaction_history")
+                .whereEqualTo("user_id",userId)
+                .whereEqualTo("transaction_type","vote")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         List<Transaction> newTransactions = new ArrayList<>();
-
+                        Log.d("TESTTAG",task.getResult().size() + "Size");
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             // Manually extract fields
                             String date = document.getString("date");

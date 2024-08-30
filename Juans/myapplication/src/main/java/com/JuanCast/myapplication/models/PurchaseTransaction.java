@@ -6,15 +6,27 @@ public class PurchaseTransaction {
 
     private String transactionID;
     private String amountCharged;
+    private String transactionType;
     private String referenceNumber;
     private Long starAmount;
     private Timestamp timeStamp;
+    private String powerupName;
 
-    public PurchaseTransaction(String transactionID,String amountCharged, String referenceNumber, Long starAmount, Timestamp timeStamp) {
+
+    public PurchaseTransaction(String transactionID,String amountCharged,String transactionType, String referenceNumber, Long starAmount, Timestamp timeStamp) {
         this.transactionID = transactionID;
+        this.transactionType = transactionType;
         this.amountCharged = amountCharged;
         this.referenceNumber = referenceNumber;
         this.starAmount = starAmount;
+        this.timeStamp = timeStamp;
+    }
+
+    public PurchaseTransaction(String transactionID,String amountCharged,String transactionType, String referenceNumber, Timestamp timeStamp) {
+        this.transactionID = transactionID;
+        this.transactionType = transactionType;
+        this.amountCharged = amountCharged;
+        this.referenceNumber = referenceNumber;
         this.timeStamp = timeStamp;
     }
 
@@ -28,6 +40,14 @@ public class PurchaseTransaction {
 
     public String getReferenceNumber() {
         return referenceNumber;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public String getPowerupName() {
+        return powerupName;
     }
 
     public Long getStarAmount() {
@@ -56,5 +76,13 @@ public class PurchaseTransaction {
 
     public void setTimeStamp(Timestamp timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public void setPowerupName(String powerupName) {
+        this.powerupName = powerupName;
     }
 }

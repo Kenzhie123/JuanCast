@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -57,7 +58,7 @@ public class PurchaseTransactions extends AppCompatActivity {
         PT_PurchaseListRefreshLayout.setRefreshing(true);
         firebaseFirestore.collection("transaction_history")
                 .whereEqualTo("user_id",firebaseAuth.getCurrentUser().getUid())
-                .whereEqualTo("transaction_type","star_purchase")
+                .whereIn("transaction_type", Arrays.asList("star_purchase","powerup_purchase"))
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -66,14 +67,31 @@ public class PurchaseTransactions extends AppCompatActivity {
                         for(DocumentSnapshot document : queryDocumentSnapshots.getDocuments())
                         {
                             Map<String,Object> data = document.getData();
-                            PurchaseTransaction purchaseTransaction =
-                                    new PurchaseTransaction(
-                                            document.getId(),
-                                            (String)data.get("amount_charged"),
-                                            (String)data.get("reference_number"),
-                                            (Long)data.get("star"),
-                                            (Timestamp) data.get("timestamp")
-                                    );
+                            PurchaseTransaction purchaseTransaction = null;
+                            if(((String)data.get("transaction_type")).equals("star_purchase"))
+                            {
+                                purchaseTransaction =
+                                        new PurchaseTransaction(
+                                                document.getId(),
+                                                (String)data.get("amount_charged"),
+                                                (String)data.get("transaction_type"),
+                                                (String)data.get("reference_number"),
+                                                (Long)data.get("star"),
+                                                (Timestamp) data.get("timestamp")
+                                        );
+                            }
+                            else{
+                                purchaseTransaction =
+                                        new PurchaseTransaction(
+                                                document.getId(),
+                                                (String)data.get("amount_charged"),
+                                                (String)data.get("transaction_type"),
+                                                (String)data.get("reference_number"),
+                                                (Timestamp) data.get("timestamp")
+                                        );
+                            }
+
+
                             purchaseTransactionList.add(purchaseTransaction);
                         }
                         PT_PurchaseTransactionsRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));

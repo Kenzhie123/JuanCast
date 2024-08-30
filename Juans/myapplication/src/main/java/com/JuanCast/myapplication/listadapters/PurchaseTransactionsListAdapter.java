@@ -37,14 +37,36 @@ public class PurchaseTransactionsListAdapter extends RecyclerView.Adapter<Purcha
         PurchaseTransaction currentPurchaseTransaction = purchaseTransactionList.get(position);
         String dateText = "Date: "+Tools.dateToString(currentPurchaseTransaction.getTimeStamp().toDate());
         String timeText = "Time: "+Tools.timeToString(currentPurchaseTransaction.getTimeStamp().toDate());
-        String starText = "Star: "+currentPurchaseTransaction.getStarAmount();
         String transactionIDText = "Transaction ID: "+currentPurchaseTransaction.getTransactionID();
         String amountChargedText = "Amount Charged: "+currentPurchaseTransaction.getAmountCharged();
-        holder.TI_Date.setText(dateText);
-        holder.TI_Time.setText(timeText);
-        holder.TI_Star.setText(starText);
-        holder.TI_TransactionID.setText(transactionIDText);
-        holder.TI_AmountCharged.setText(amountChargedText);
+        String transactionType = "Transaction Type: "+Tools.getTransactionTypeFormatted(currentPurchaseTransaction.getTransactionType());
+        if(currentPurchaseTransaction.getTransactionType().equals("star_purchase"))
+        {
+            String starText = "Star: "+currentPurchaseTransaction.getStarAmount();
+            holder.TI_Date.setText(dateText);
+            holder.TI_Time.setText(timeText);
+            holder.TI_Star.setText(starText);
+            holder.TI_TransactionID.setText(transactionIDText);
+            holder.TI_AmountCharged.setText(amountChargedText);
+            holder.TI_TransactionType.setText(transactionType);
+
+            holder.TI_PowerupName.setVisibility(View.GONE);
+        }
+        else
+        {
+            String powerupText = "Power Up Name: "  + Tools.getPowerupNameFromProductID(currentPurchaseTransaction.getReferenceNumber());
+            holder.TI_PowerupName.setText(powerupText);
+            holder.TI_Date.setText(dateText);
+            holder.TI_Time.setText(timeText);
+            holder.TI_TransactionID.setText(transactionIDText);
+            holder.TI_AmountCharged.setText(amountChargedText);
+            holder.TI_TransactionType.setText(transactionType);
+
+            holder.TI_Star.setVisibility(View.GONE);
+        }
+
+
+
     }
 
     @Override
@@ -59,6 +81,8 @@ public class PurchaseTransactionsListAdapter extends RecyclerView.Adapter<Purcha
         TextView TI_Star;
         TextView TI_TransactionID;
         TextView TI_AmountCharged;
+        TextView TI_TransactionType;
+        TextView TI_PowerupName;
         public PurchaseTransactionListViewHolder(@NonNull View itemView) {
             super(itemView);
             TI_Date = itemView.findViewById(R.id.TI_Date);
@@ -66,6 +90,8 @@ public class PurchaseTransactionsListAdapter extends RecyclerView.Adapter<Purcha
             TI_Star = itemView.findViewById(R.id.TI_Star);
             TI_TransactionID = itemView.findViewById(R.id.TI_TransactionID);
             TI_AmountCharged = itemView.findViewById(R.id.TI_AmountCharged);
+            TI_TransactionType = itemView.findViewById(R.id.TI_TransactionType);
+            TI_PowerupName = itemView.findViewById(R.id.TI_PowerupName);
         }
     }
 }

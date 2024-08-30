@@ -12,7 +12,7 @@ android {
         applicationId = "com.JuanCast.myapplication"
         minSdk = 24
         targetSdk = 34
-        versionCode = 14
+        versionCode = 19
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

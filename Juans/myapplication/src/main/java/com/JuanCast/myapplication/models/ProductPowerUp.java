@@ -2,19 +2,19 @@ package com.JuanCast.myapplication.models;
 
 import com.android.billingclient.api.ProductDetails;
 
-public class ProductStar {
+public class ProductPowerUp {
     private String productID;
-    private int starAmount;
+    private long durationMinutes;
     private ProductDetails productDetails;
 
-    public ProductStar(String productID, int starAmount) {
+    public ProductPowerUp(String productID, long durationMinutes) {
         this.productID = productID;
-        this.starAmount = starAmount;
+        this.durationMinutes = durationMinutes;
     }
 
-    public ProductStar(String productID, int starAmount, ProductDetails productDetails) {
+    public ProductPowerUp(String productID, long durationMinutes, ProductDetails productDetails) {
         this.productID = productID;
-        this.starAmount = starAmount;
+        this.durationMinutes = durationMinutes;
         this.productDetails = productDetails;
     }
 
@@ -22,8 +22,12 @@ public class ProductStar {
         return productID;
     }
 
-    public int getStarAmount() {
-        return starAmount;
+    public long getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public ProductDetails getProductDetails() {
+        return productDetails;
     }
 
     public String getFormattedPrice()
@@ -31,27 +35,15 @@ public class ProductStar {
         return productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice();
     }
 
-    public ProductDetails getProductDetails() {
-        return productDetails;
-    }
-
     public void setProductID(String productID) {
         this.productID = productID;
     }
 
-    public void setStarAmount(int starAmount) {
-        this.starAmount = starAmount;
+    public void setDurationMinutes(int durationMinutes) {
+        this.durationMinutes = durationMinutes;
     }
 
     public void setProductDetails(ProductDetails productDetails) {
         this.productDetails = productDetails;
-    }
-
-    @Override
-    public String toString() {
-        return "ProductStar{" +
-                "productID='" + productID + '\'' +
-                ", starAmount=" + starAmount +
-                '}';
     }
 }
