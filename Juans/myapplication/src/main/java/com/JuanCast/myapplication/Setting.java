@@ -424,6 +424,14 @@ public class Setting extends AppCompatActivity {
         startActivity(Intent.createChooser(shareIntent, "Share link via"));
     }
 
+
+    private void shareLink(String url) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+        startActivity(Intent.createChooser(shareIntent, "Share link via"));
+    }
+
     @Override
     public void onBackPressed() {
         // Perform custom action before calling the default behavior
