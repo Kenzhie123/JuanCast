@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="140e1b4d-5956-4bca-8282-f9e9234df967" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/res/drawable/logohorizontalblue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/res/layout/dialog_custom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Juans/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/.idea/deploymentTargetSelector.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Juans/myapplication/src/main/java/com/JuanCast/myapplication/Setting.java" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/java/com/JuanCast/myapplication/Setting.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Juans/myapplication/src/main/java/com/JuanCast/myapplication/listadapters/VSArtistVoteListAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/java/com/JuanCast/myapplication/listadapters/VSArtistVoteListAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Juans/myapplication/src/main/res/layout/activity_setting.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/res/layout/activity_setting.xml" afterDir="false" />
-    </list>
+    <list default="true" id="657a15d7-330f-4071-b9b3-548b0bbf7344" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

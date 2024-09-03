@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Juans">
         <activity
+            android:name=".TermsConditions"
+            android:exported="false" />
+        <activity
             android:name=".PurchaseTransactions"
             android:exported="false" />
         <activity
