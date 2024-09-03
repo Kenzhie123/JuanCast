@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -314,7 +315,13 @@ public class Setting extends AppCompatActivity {
         buttonApplyPromoCode = findViewById(R.id.buttonApplyPromoCode);
 
 
-        buttonApplyPromoCode.setOnClickListener(v -> applyPromoCode());
+        buttonApplyPromoCode.setOnClickListener(v -> {
+            // Tawagin ang method para mag-apply ng promo code
+            applyPromoCode();
+
+            // I-clear ang input field pagkatapos i-apply ang promo code
+            editTextPromoCode.setText("");
+        });
 
 
 
@@ -404,9 +411,22 @@ public class Setting extends AppCompatActivity {
     }
 
     private void showSuccessDialog(int points) {
+        // Inflate the custom layout
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_success, null);
+
+        // Find views in the custom layout and set data
+        ImageView successIcon = dialogView.findViewById(R.id.success_icon);
+        TextView successMessage = dialogView.findViewById(R.id.success_message);
+        TextView pointsAwarded = dialogView.findViewById(R.id.points_awarded);
+
+        // Update the message and points awarded
+        successMessage.setText("You have been awarded points!");
+        pointsAwarded.setText(points + " Points");
+
+        // Build and show the dialog with the custom view
         new AlertDialog.Builder(this)
-                .setTitle("Success")
-                .setMessage("You have been awarded " + points + " points!")
+                .setView(dialogView)
                 .setPositiveButton(android.R.string.ok, null)
                 .show();
     }

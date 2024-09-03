@@ -17,6 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Juans">
         <activity
+            android:name=".PrivacySignup"
+            android:exported="false" />
+        <activity
+            android:name=".TermsSignup"
+            android:exported="false" />
+        <activity
             android:name=".TermsConditions"
             android:exported="false" />
         <activity

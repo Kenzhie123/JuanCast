@@ -216,7 +216,7 @@ public class ads extends AppCompatActivity {
 
         // Scheduler initialization
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduleDailyReset(this::resetAllAdCounts, 0, 0); // 0 hours and 0 minutes (midnight)
+        scheduleDailyReset(this::resetAllAdCounts, 23, 59); // 11:59 PM
 
 
 
@@ -229,7 +229,6 @@ public class ads extends AppCompatActivity {
             scheduler.shutdown();
         }
     }
-
 
     // Schedule a task to run daily at a specified time
     private void scheduleDailyReset(Runnable task, int hourOfDay, int minuteOfHour) {
@@ -247,7 +246,7 @@ public class ads extends AppCompatActivity {
 
         nextRun.set(Calendar.HOUR_OF_DAY, hourOfDay);
         nextRun.set(Calendar.MINUTE, minuteOfHour);
-        nextRun.set(Calendar.SECOND, 0);
+        nextRun.set(Calendar.SECOND, 59);
         nextRun.set(Calendar.MILLISECOND, 0);
 
         // If it's past the specified time today, schedule for the next day
@@ -257,8 +256,6 @@ public class ads extends AppCompatActivity {
 
         return nextRun.getTimeInMillis() - now.getTimeInMillis();
     }
-
-
 
     // Reset all ad counts
     private void resetAllAdCounts() {
@@ -275,7 +272,6 @@ public class ads extends AppCompatActivity {
                     }
                 });
     }
-
 
     // Reset the ad count for each document in Firestore
     private void resetAdCountForDocument(DocumentSnapshot document) {
@@ -296,8 +292,8 @@ public class ads extends AppCompatActivity {
         firebaseFirestore.collection("AdCounts")
                 .document(userId + "_" + imageViewId)
                 .set(adCountData)
-                .addOnSuccessListener(documentReference -> Log.d(TAG, "Ad count na-update nang matagumpay"))
-                .addOnFailureListener(e -> Log.e(TAG, "Error sa pag-update ng ad count: " + e.getMessage()));
+                .addOnSuccessListener(documentReference -> Log.d(TAG, "Ad count updated successfully"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error updating ad count: " + e.getMessage()));
     }
 
 

@@ -150,17 +150,21 @@ public class Store extends AppCompatActivity {
                     int remainingStars = availableStars - requiredStars;
 
                     // Update UI
-                    tvEquivalentSuns.setText(""+requiredStars);
+                    tvEquivalentSuns.setText(String.valueOf(requiredStars));
                     tvAvailableStars.setText(String.valueOf(remainingStars));
                     tvAvailableSuns.setText(String.valueOf(updatedSuns));
 
                     // Update Firestore
                     updateStarsAndSuns(currentUserId, remainingStars, updatedSuns);
+
+                    // Clear the EditText input
+                    etSuns.setText("");
                 } else {
                     showCustomToast("Not enough stars available.", R.drawable.juanscast);
                 }
             }
         });
+
 
 
         etSuns.addTextChangedListener(new TextWatcher() {
