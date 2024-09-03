@@ -394,13 +394,24 @@ public class Setting extends AppCompatActivity {
             } else {
                 throw new FirebaseFirestoreException("User document does not exist", FirebaseFirestoreException.Code.NOT_FOUND);
             }
-            return null;
-        }).addOnSuccessListener(aVoid -> {
-            Toast.makeText(this, "Points awarded successfully!", Toast.LENGTH_SHORT).show();
+            return points; // Return the number of points awarded
+        }).addOnSuccessListener(awardedPoints -> {
+            // Show dialog box upon successful points awarding with the points received
+            showSuccessDialog(awardedPoints);
         }).addOnFailureListener(e -> {
             Toast.makeText(this, "Error awarding points: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         });
     }
+
+    private void showSuccessDialog(int points) {
+        new AlertDialog.Builder(this)
+                .setTitle("Success")
+                .setMessage("You have been awarded " + points + " points!")
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+    }
+
+
 
     //*******************************************************************************************************
 

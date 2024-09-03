@@ -276,7 +276,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/montserrat_regular"
-                android:text="Stars voted will be multiplied 2x \n Duration: 1 hour. "
+                android:text="Stars voted will be multiplied 2x \nDuration: 1 hour. "
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
@@ -338,7 +338,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/montserrat_regular"
-                android:text="Suns voted will be multiplied 2x \n Duration: 30 mins. "
+                android:text="Suns voted will be multiplied 2x \nDuration: 30 mins. "
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
@@ -371,16 +371,16 @@
         android:layout_margin="16dp"
         android:fontFamily="@font/montserrat_regular"
         android:padding="20dp"
-        android:text="(1) All power-ups purchased will automatically be awarded to the account.
-        \n(2) Power-ups are not transferrable or refundable.
-        \n(3)You can only use 1x (one) power-ups at any given time."
+        android:text="1. All power-ups purchased will automatically be awarded to the account.
+        \n2. Power-ups are not transferrable or refundable.
+        \n3. You can only use 1x (one) power-ups at any given time."
         android:textColor="#ffffff"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardViewApolaki"
-        app:layout_constraintVertical_bias="0.107" />
+        app:layout_constraintVertical_bias="0.6" />
 
 
     <RelativeLayout
