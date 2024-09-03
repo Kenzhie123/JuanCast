@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,6 +27,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Setting extends AppCompatActivity {
 
@@ -54,8 +59,25 @@ public class Setting extends AppCompatActivity {
     private LinearLayout privacy4;
     private ImageView privacy5;
 
+    //terms
+    private LinearLayout terms1;
+    private ImageView terms2;
+    private TextView terms3;
+    private LinearLayout terms4;
+    private ImageView terms5;
+
+
+    //terms
+    private LinearLayout share1;
+    private ImageView share2;
+    private TextView share3;
+    private LinearLayout share4;
+    private ImageView share5;
+
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
+    private EditText editTextPromoCode;
+    private Button buttonApplyPromoCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +183,88 @@ public class Setting extends AppCompatActivity {
             overridePendingTransition(0, 0); // No animation
         });
 
+        //terms
+        terms1 = findViewById(R.id.Terms1);
+        terms2 = findViewById(R.id.Terms2);
+        terms3 = findViewById(R.id.Terms3);
+        terms4 = findViewById(R.id.Terms4);
+        terms5 = findViewById(R.id.Terms5);
+
+        //terms
+        terms1.setOnClickListener(v -> {
+            Intent intent = new Intent(Setting.this, TermsConditions.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
+        terms2.setOnClickListener(v -> {
+            Intent intent = new Intent(Setting.this, TermsConditions.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
+        terms3.setOnClickListener(v -> {
+            Intent intent = new Intent(Setting.this, TermsConditions.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
+        terms4.setOnClickListener(v -> {
+            Intent intent = new Intent(Setting.this, TermsConditions.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
+        terms5.setOnClickListener(v -> {
+            Intent intent = new Intent(Setting.this, TermsConditions.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
+        //share
+        share1 = findViewById(R.id.share1);
+        share2 = findViewById(R.id.share2);
+        share3 = findViewById(R.id.share3);
+        share4 = findViewById(R.id.share4);
+        share5 = findViewById(R.id.share5);
+
+
+        share1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareLink("https://juancast.ph/");
+            }
+        });
+
+        share2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareLink("https://juancast.ph/");
+            }
+        });
+
+        share3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareLink("https://juancast.ph/");
+            }
+        });
+
+
+        share4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareLink("https://juancast.ph/");
+            }
+        });
+
+        share5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareLink("https://juancast.ph/");
+            }
+        });
+
 
 
 
@@ -203,6 +307,110 @@ public class Setting extends AppCompatActivity {
                 showConfirmationDialog();
             }
         });
+
+
+
+        editTextPromoCode = findViewById(R.id.editTextPromoCode);
+        buttonApplyPromoCode = findViewById(R.id.buttonApplyPromoCode);
+
+
+        buttonApplyPromoCode.setOnClickListener(v -> applyPromoCode());
+
+
+
+    }
+
+    //*******************************************Promo Code************************************************************
+    private void applyPromoCode() {
+        String promoCode = editTextPromoCode.getText().toString().trim();
+        if (!promoCode.isEmpty()) {
+            checkPromoCode(promoCode);
+        } else {
+            Toast.makeText(this, "Please enter a promo code", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checkPromoCode(String promoCode) {
+        DocumentReference promoCodeRef = firebaseFirestore.collection("promoCodes").document(promoCode);
+
+        promoCodeRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document != null && document.exists() && document.getBoolean("isActive")) {
+                    int points = document.getLong("points").intValue();
+                    FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                    if (currentUser != null) {
+                        String userId = currentUser.getUid();
+                        checkIfCodeUsed(userId, promoCode, points);
+                    } else {
+                        Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, "Invalid or inactive promo code", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Error checking promo code", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void checkIfCodeUsed(String userId, String promoCode, int points) {
+        DocumentReference userRef = firebaseFirestore.collection("User").document(userId);
+
+        userRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot snapshot = task.getResult();
+                if (snapshot != null && snapshot.exists()) {
+                    List<String> usedCodes = (List<String>) snapshot.get("usedPromoCodes");
+                    if (usedCodes != null && usedCodes.contains(promoCode)) {
+                        Toast.makeText(this, "Promo code already used", Toast.LENGTH_SHORT).show();
+                    } else {
+                        awardPointsToUser(userId, points, promoCode);
+                    }
+                } else {
+                    Toast.makeText(this, "User document does not exist", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Error checking user data", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void awardPointsToUser(String userId, int points, String promoCode) {
+        DocumentReference userRef = firebaseFirestore.collection("User").document(userId);
+
+        firebaseFirestore.runTransaction(transaction -> {
+            DocumentSnapshot snapshot = transaction.get(userRef);
+            if (snapshot.exists()) {
+                long currentPoints = snapshot.contains("votingPoints") ? snapshot.getLong("votingPoints") : 0;
+                transaction.update(userRef, "votingPoints", currentPoints + points);
+
+                List<String> usedCodes = (List<String>) snapshot.get("usedPromoCodes");
+                if (usedCodes == null) {
+                    usedCodes = new ArrayList<>();
+                }
+                usedCodes.add(promoCode);
+                transaction.update(userRef, "usedPromoCodes", usedCodes);
+            } else {
+                throw new FirebaseFirestoreException("User document does not exist", FirebaseFirestoreException.Code.NOT_FOUND);
+            }
+            return null;
+        }).addOnSuccessListener(aVoid -> {
+            Toast.makeText(this, "Points awarded successfully!", Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Error awarding points: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    //*******************************************************************************************************
+
+
+
+    private void shareLink(String url) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+        startActivity(Intent.createChooser(shareIntent, "Share link via"));
     }
 
     @Override
@@ -352,3 +560,4 @@ public class Setting extends AppCompatActivity {
 
 
 }
+                                                                        
