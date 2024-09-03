@@ -122,7 +122,7 @@
 
         <LinearLayout
             android:layout_marginTop="10dp"
-            android:id="@+id/Terms"
+            android:id="@+id/Terms1"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -131,6 +131,7 @@
 
 
             <ImageView
+                android:id="@+id/Terms2"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
@@ -143,6 +144,7 @@
 
 
             <TextView
+                android:id="@+id/Terms3"
                 android:layout_marginStart="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -153,6 +155,7 @@
                 android:textSize="18dp"/>
 
             <LinearLayout
+                android:id="@+id/Terms4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="end">
@@ -161,6 +164,7 @@
 
 
                 <ImageView
+                    android:id="@+id/Terms5"
                     android:layout_width="40dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="10dp"
@@ -184,7 +188,7 @@
             android:layout_height="50dp"
             android:orientation="horizontal"
             tools:ignore="MissingConstraints"
-            app:layout_constraintTop_toBottomOf="@id/Terms">
+            app:layout_constraintTop_toBottomOf="@id/Terms1">
 
 
             <ImageView
@@ -299,7 +303,7 @@
 
         <LinearLayout
             android:layout_marginTop="10dp"
-            android:id="@+id/share"
+            android:id="@+id/share1"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -308,6 +312,7 @@
 
 
             <ImageView
+                android:id="@+id/share2"
                 android:layout_marginStart="15dp"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
@@ -320,6 +325,7 @@
 
 
             <TextView
+                android:id="@+id/share3"
                 android:layout_marginStart="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -330,6 +336,7 @@
                 android:textSize="18dp"/>
 
             <LinearLayout
+                android:id="@+id/share4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="end">
@@ -338,6 +345,7 @@
 
 
                 <ImageView
+                    android:id="@+id/share5"
                     android:layout_width="40dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="10dp"
@@ -350,7 +358,38 @@
 
             </LinearLayout>
 
+
         </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="20dp">
+
+            <EditText
+                android:id="@+id/editTextPromoCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white"
+                android:textColorHint="@color/white"
+                android:hint="Enter Promo Code" />
+
+            <Button
+                android:id="@+id/buttonApplyPromoCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#66B32F"
+                android:textColor="@color/white"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Apply Promo Code" />
+        </LinearLayout>
+
+
 
         <Button
             android:id="@+id/deactivateButton"
@@ -360,9 +399,11 @@
             android:textColor="@color/white"
             android:backgroundTint="#FF0000"
             android:fontFamily="@font/montserrat_regular"
-            android:layout_marginTop="250dp" />
+            android:layout_marginTop="100dp" />
 
     </LinearLayout>
+
+
 
 
     <LinearLayout
@@ -480,4 +521,4 @@
     </LinearLayout>
 
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
