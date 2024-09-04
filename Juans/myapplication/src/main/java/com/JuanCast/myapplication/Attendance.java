@@ -68,9 +68,13 @@ public class Attendance extends AppCompatActivity {
 
         // Initialize UI elements
         initializeUI();
+
         // Initialize day buttons and handle reward claiming
         initializeDayButtons();
-        setupWeeklyReset(); // Ensure this is called
+
+        // Setup weekly reset logic (Monday to Sunday)
+        setupWeeklyReset();
+
         // Check if it's the user's first login and claim day 1 reward
         checkFirstLoginAndClaim();
 
@@ -80,7 +84,6 @@ public class Attendance extends AppCompatActivity {
         Community = findViewById(R.id.Community);
         Store = findViewById(R.id.Store);
         Cast = findViewById(R.id.Cast);
-
 
         back.setOnClickListener(v -> {
             Intent intent = new Intent(Attendance.this, Profile.class);
@@ -121,6 +124,7 @@ public class Attendance extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(0, 0); // No animation
         });
+
     }
 
     @Override
@@ -136,6 +140,7 @@ public class Attendance extends AppCompatActivity {
         // Call the default back behavior
         super.onBackPressed();
     }
+
 
     @Override
     protected void onResume() {
@@ -262,6 +267,7 @@ public class Attendance extends AppCompatActivity {
         scheduleWeeklyReset(delayMillis);
     }
 
+
     private void scheduleWeeklyReset(long delayMillis) {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             resetWeeklyClaimsForAllUsers(); // Trigger reset for all users
@@ -269,6 +275,8 @@ public class Attendance extends AppCompatActivity {
             setupWeeklyReset();
         }, delayMillis);
     }
+
+
 
     private void resetWeeklyClaimsForAllUsers() {
         firebaseFirestore.collection("User").get()
@@ -330,43 +338,41 @@ public class Attendance extends AppCompatActivity {
     }
 
     private void claimRewardForDay(int dayIndex) {
-        // Check if the reward for the specific day has already been claimed
-        firebaseFirestore.collection("User").document(currentUserId)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        Map<String, Boolean> claimedDays = (Map<String, Boolean>) documentSnapshot.get("claimedDays");
-                        if (claimedDays == null) {
-                            claimedDays = new HashMap<>();
-                        }
+        // Implement reward claiming logic for the specific day
+        boolean claimed = prefs.getBoolean("button_claimed_" + dayIndex, false);
+        if (claimed) {
+            // Button has already been claimed, show a toast message
+            Toast.makeText(this, "You have already claimed the reward for day " + (dayIndex + 1), Toast.LENGTH_SHORT).show();
+        } else {
+            // Proceed with claiming logic
+            Calendar calendar = Calendar.getInstance();
+            int currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
-                        boolean alreadyClaimed = claimedDays.getOrDefault(String.valueOf(dayIndex), false);
+            // Check if the current day matches the claim day index
+            if (currentDayOfWeek == getDayOfWeekIndex(dayIndex)) {
+                long lastClaimTime = prefs.getLong("button_last_claim_time_" + dayIndex, 0);
+                long currentTime = System.currentTimeMillis();
 
-                        if (alreadyClaimed) {
-                            Toast.makeText(this, "You have already claimed the reward for day " + (dayIndex + 1), Toast.LENGTH_SHORT).show();
-                        } else {
-                            // Check if today is the correct day for claiming
-                            Calendar calendar = Calendar.getInstance();
-                            int currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                if (currentTime - lastClaimTime >= 24 * 60 * 60 * 1000) {
+                    // Sufficient time has passed since last claim
+                    showClaimConfirmationDialog(dayIndex); // Show confirmation dialog to claim reward
+                } else {
+                    // Not enough time has passed, show a toast message with when they can claim
+                    calendar.setTimeInMillis(lastClaimTime + 24 * 60 * 60 * 1000);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                    String claimTime = dateFormat.format(calendar.getTime());
 
-                            if (currentDayOfWeek == getDayOfWeekIndex(dayIndex)) {
-                                // Update the claim status and points
-                                showClaimConfirmationDialog(dayIndex);
-                            } else {
-                                String dayOfWeek = getDayOfWeek(dayIndex);
-                                showCustomToast("You can only claim the reward for " + dayOfWeek, R.drawable.juanscast);
-                            }
-                        }
-                    } else {
-                        Log.d("Attendance", "User document does not exist");
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.w("Attendance", "Error fetching user document", e);
-                    Toast.makeText(this, "Error checking claim status", Toast.LENGTH_SHORT).show();
-                });
+                    // Show custom Toast with image
+                    showCustomToast("You can claim this reward again tomorrow at " + claimTime, R.drawable.juanscast); // Palitan ang R.drawable.ic_info sa iyong image resource ID
+                }
+            } else {
+                // Current day does not match the claim day index, show a toast message
+                String dayOfWeek = getDayOfWeek(dayIndex);
+                // Show custom Toast with image
+                showCustomToast("You can only claim the reward for " + dayOfWeek, R.drawable.juanscast); // Palitan ang R.drawable.ic_warning sa iyong image resource ID
+            }
+        }
     }
-
 
     private void showCustomToast(String message, int imageResId) {
         // Gumawa ng LayoutInflater object
@@ -396,25 +402,15 @@ public class Attendance extends AppCompatActivity {
         builder.setTitle("Claim Reward");
         builder.setMessage("Are you sure you want to claim the reward for " + getDayOfWeek(dayIndex) + "?");
         builder.setPositiveButton("Claim", (dialog, which) -> {
-            // Update Firestore to mark the button as claimed
-            firebaseFirestore.collection("User").document(currentUserId)
-                    .update("claimedDays." + dayIndex, true)
-                    .addOnSuccessListener(aVoid -> {
-                        // Update user points
-                        updateVotingPoints(REWARD_POINTS);
+            // Mark the button as claimed
+            markButtonAsClaimed(dayIndex);
 
-                        // Update local UI
-                        markButtonAsClaimed(dayIndex);
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.w("Attendance", "Error updating claim status", e);
-                        Toast.makeText(this, "Failed to claim reward", Toast.LENGTH_SHORT).show();
-                    });
+            // Update voting points for claiming the reward (change from 10 to 20)
+            updateVotingPoints(REWARD_POINTS); // Update voting points for claiming the reward
         });
         builder.setNegativeButton("Cancel", null);
         builder.show();
     }
-
 
     private void markButtonAsClaimed(int dayIndex) {
         SharedPreferences.Editor editor = prefs.edit();
@@ -430,23 +426,20 @@ public class Attendance extends AppCompatActivity {
     }
 
     private void updateVotingPoints(int pointsToAdd) {
+        // Fetch current voting points from Firestore and update
         firebaseFirestore.collection("User").document(currentUserId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
+                        // Retrieve current points
                         Long currentPoints = documentSnapshot.getLong("votingPoints");
+
                         if (currentPoints != null) {
+                            // Calculate new total points
                             long newPoints = currentPoints + pointsToAdd;
-                            firebaseFirestore.collection("User").document(currentUserId)
-                                    .update("votingPoints", newPoints)
-                                    .addOnSuccessListener(aVoid -> {
-                                        Log.d("Attendance", "Voting points updated successfully");
-                                        loadPoints(currentUserId); // Reload points to update UI
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Log.w("Attendance", "Error updating voting points", e);
-                                        Toast.makeText(this, "Failed to update voting points", Toast.LENGTH_SHORT).show();
-                                    });
+
+                            // Update points in Firestore
+                            updatePointsInFirestore(newPoints);
                         } else {
                             Log.d("Attendance", "votingPoints field is null");
                             Toast.makeText(this, "Failed to update voting points - Voting points field is null", Toast.LENGTH_SHORT).show();
@@ -457,11 +450,11 @@ public class Attendance extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(e -> {
+                    // Handle any errors that may occur when fetching current points
                     Log.w("Attendance", "Error fetching current voting points", e);
                     Toast.makeText(this, "Failed to fetch current voting points", Toast.LENGTH_SHORT).show();
                 });
     }
-
 
     private void updatePointsInFirestore(long newPoints) {
         // Update points in Firestore
