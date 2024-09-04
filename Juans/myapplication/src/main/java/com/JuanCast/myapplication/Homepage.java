@@ -52,6 +52,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -107,6 +108,14 @@ public class Homepage extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<Post> postList;
     private PostAdapter postAdapter;
+
+
+    private ImageSlider imageSlider;
+    private ArrayList<SlideModel> imageList = new ArrayList<>();
+    private ArrayList<String> linkList = new ArrayList<>();
+
+
+
 
 
 
@@ -483,41 +492,11 @@ public class Homepage extends AppCompatActivity {
 
         // Get user details from Firestore
         fetchUserDetails();
+        imageSlider = findViewById(R.id.image_slider);
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
-        // Set up image slider
-        ImageSlider imageSlider = findViewById(R.id.image_slider);
-        ArrayList<SlideModel> imageList = new ArrayList<>();
+        loadImages();
 
-
-
-
-        firebaseFirestore.collection("SliderImages")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            // Assuming each document has a field "imageUrl"
-                            String imageUrl = document.getString("url");
-
-                            if (imageUrl != null && !imageUrl.isEmpty()) {
-                                imageList.add(new SlideModel(imageUrl, ScaleTypes.FIT));
-                            } else {
-                                Log.e("ImageSlider", "Invalid imageUrl: " + imageUrl);
-                            }
-                        }
-
-                        // Check if the list is empty
-                        if (!imageList.isEmpty()) {
-                            imageSlider.setImageList(imageList, ScaleTypes.FIT);
-                        } else {
-                            Toast.makeText(this, "No images found for the slider.", Toast.LENGTH_SHORT).show();
-                        }
-
-                    } else {
-                        Log.e("ImageSlider", "Error fetching documents: ", task.getException());
-                        Toast.makeText(this, "Error fetching images.", Toast.LENGTH_SHORT).show();
-                    }
-                });
 
 
 
@@ -603,6 +582,60 @@ public class Homepage extends AppCompatActivity {
             noInternetLayout.setVisibility(View.GONE);
         }
     }
+
+    private void loadImages() {
+        firebaseFirestore.collection("SliderImages")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        imageList.clear();
+                        linkList.clear();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String imageUrl = document.getString("url");
+                            String targetUrl = document.getString("link");
+                            String documentId = document.getId(); // Get the document ID
+
+                            if (imageUrl != null && !imageUrl.isEmpty()) {
+                                imageList.add(new SlideModel(imageUrl, ScaleTypes.FIT));
+                                linkList.add(targetUrl != null ? targetUrl : "");
+                            } else {
+                                Log.e("ClientActivity", "Invalid imageUrl: " + imageUrl);
+                            }
+                        }
+
+                        if (!imageList.isEmpty()) {
+                            imageSlider.setImageList(imageList, ScaleTypes.FIT);
+                            imageSlider.setItemClickListener(position -> {
+                                String link = linkList.get(position);
+                                String documentId = task.getResult().getDocuments().get(position).getId(); // Get document ID for the clicked item
+
+                                if (!link.isEmpty()) {
+                                    // Update click count in Firestore
+                                    DocumentReference docRef = firebaseFirestore.collection("SliderImages").document(documentId);
+                                    docRef.update("Visiting", FieldValue.increment(1))
+                                            .addOnSuccessListener(aVoid -> {
+                                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                                intent.setData(Uri.parse(link));
+                                                overridePendingTransition(0, 0); // Walang animation
+                                                startActivity(intent);
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Log.e("ClientActivity", "Error updating click count: ", e);
+                                                Toast.makeText(this, "Error updating click count.", Toast.LENGTH_SHORT).show();
+                                            });
+                                }
+                            });
+                        } else {
+                            Toast.makeText(this, "No images found for the slider.", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Log.e("ClientActivity", "Error fetching documents: ", task.getException());
+                        Toast.makeText(this, "Error fetching images.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 
 
     @Override
