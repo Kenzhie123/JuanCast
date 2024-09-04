@@ -335,10 +335,22 @@
                         android:id="@+id/Notices"
                         android:layout_width="100dp"
                         android:layout_height="60dp"
+                        android:layout_marginRight="5dp"
                         android:background="@drawable/profilenmebackground"
                         android:fontFamily="@font/montserrat_bold"
                         android:gravity="center"
                         android:text="Notices"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/promo"
+                        android:layout_width="100dp"
+                        android:layout_height="60dp"
+                        android:background="@drawable/profilenmebackground"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:gravity="center"
+                        android:text="Promo \n Code"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 

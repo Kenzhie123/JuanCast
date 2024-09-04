@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Juans">
         <activity
+            android:name=".PromoCode"
+            android:exported="false" />
+        <activity
             android:name=".PrivacySignup"
             android:exported="false" />
         <activity
