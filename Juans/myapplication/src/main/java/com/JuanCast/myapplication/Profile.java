@@ -82,6 +82,7 @@ public class Profile extends AppCompatActivity {
     private TextView Setting;
     private  TextView Faqs;
     private  TextView Notices;
+    private  TextView promo;
 
 
     private RelativeLayout noInternetLayout;
@@ -105,6 +106,7 @@ public class Profile extends AppCompatActivity {
         Setting = findViewById(R.id.Setting);
         Faqs = findViewById(R.id.FAQs);
         Notices = findViewById(R.id.Notices);
+        promo = findViewById(R.id.promo);
 
         transaction = findViewById(R.id.transaction);
         logo = findViewById(R.id.logo);
@@ -216,6 +218,15 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Profile.this, Transactions.class);
+                startActivity(intent);
+                overridePendingTransition(0, 0); // No animation
+            }
+        });
+
+        promo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Profile.this, PromoCode.class);
                 startActivity(intent);
                 overridePendingTransition(0, 0); // No animation
             }
