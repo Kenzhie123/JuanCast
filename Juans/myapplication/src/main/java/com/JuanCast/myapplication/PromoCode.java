@@ -1,5 +1,6 @@
 package com.JuanCast.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,8 @@ public class PromoCode extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
+    private ImageView back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,13 @@ public class PromoCode extends AppCompatActivity {
         editTextPromoCode = findViewById(R.id.editTextPromoCode);
         buttonApplyPromoCode = findViewById(R.id.buttonApplyPromoCode);
 
+        back = findViewById(R.id.back);
+        back.setOnClickListener(v -> {
+            Intent intent = new Intent(PromoCode.this, Profile.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
 
         buttonApplyPromoCode.setOnClickListener(v -> {
             // Tawagin ang method para mag-apply ng promo code
@@ -55,6 +65,22 @@ public class PromoCode extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    public void onBackPressed() {
+        // Perform custom action before calling the default behavior
+        Intent intent = new Intent(this, Profile.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+
+        // Use overridePendingTransition after startActivity
+        overridePendingTransition(0, 0);
+
+        // Call the default back behavior
+        super.onBackPressed();
+    }
+
+
 
     //*******************************************Promo Code************************************************************
     private void applyPromoCode() {

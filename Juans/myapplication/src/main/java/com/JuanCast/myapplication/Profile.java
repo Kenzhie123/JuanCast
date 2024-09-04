@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -35,11 +36,16 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Profile extends AppCompatActivity {
@@ -50,6 +56,10 @@ public class Profile extends AppCompatActivity {
     private Uri imageUri;
 
     private ProgressBar profileImageProgressBar;
+
+    private LinearLayout promolin; // Reference to the LinearLayout
+    private EditText editTextPromoCode;
+    private Button buttonApplyPromoCode;
 
 
 
@@ -70,6 +80,7 @@ public class Profile extends AppCompatActivity {
     private StorageReference storageReference;
 
     private ImageView logo;
+    private Button back;
 
     //navvar
     private ImageView Community;
@@ -114,6 +125,9 @@ public class Profile extends AppCompatActivity {
         sunpoints = findViewById(R.id.sunpoints);
 
         profileImageProgressBar = findViewById(R.id.profileImageProgressBar);
+        promolin = findViewById(R.id.promoLin);
+        editTextPromoCode = findViewById(R.id.editTextPromoCode);
+        buttonApplyPromoCode = findViewById(R.id.buttonApplyPromoCode);
 
 
         welcomeTextView = findViewById(R.id.welcomeTextView);
@@ -142,6 +156,23 @@ public class Profile extends AppCompatActivity {
         loadStarPoints(currentUserId, starpoints); // Pass currentUserId to loadUserName method
         loadSunPoints(currentUserId, sunpoints); // Pass currentUserId to loadUserName method
 
+
+
+
+        buttonApplyPromoCode.setOnClickListener(v -> {
+            // Tawagin ang method para mag-apply ng promo code
+            applyPromoCode();
+
+            // I-clear ang input field pagkatapos i-apply ang promo code
+            editTextPromoCode.setText("");
+        });
+
+        back = findViewById(R.id.back);
+        back.setOnClickListener(v -> {
+            promolin.setVisibility(View.GONE);
+            overridePendingTransition(0, 0); // No animation
+
+        });
 
 
 
@@ -226,8 +257,7 @@ public class Profile extends AppCompatActivity {
         promo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Profile.this, PromoCode.class);
-                startActivity(intent);
+                promolin.setVisibility(View.VISIBLE);
                 overridePendingTransition(0, 0); // No animation
             }
         });
@@ -335,6 +365,123 @@ public class Profile extends AppCompatActivity {
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
+    //*******************************************Promo Code************************************************************
+    private void applyPromoCode() {
+        String promoCode = editTextPromoCode.getText().toString().trim();
+        if (!promoCode.isEmpty()) {
+            checkPromoCode(promoCode);
+        } else {
+            Toast.makeText(this, "Please enter a promo code", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checkPromoCode(String promoCode) {
+        DocumentReference promoCodeRef = firebaseFirestore.collection("promoCodes").document(promoCode);
+
+        promoCodeRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document != null && document.exists() && document.getBoolean("isActive")) {
+                    int points = document.getLong("points").intValue();
+                    FirebaseUser currentUser = auth.getCurrentUser();
+                    if (currentUser != null) {
+                        String userId = currentUser.getUid();
+                        checkIfCodeUsed(userId, promoCode, points);
+                    } else {
+                        Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, "Invalid or inactive promo code", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Error checking promo code", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void checkIfCodeUsed(String userId, String promoCode, int points) {
+        DocumentReference userRef = firebaseFirestore.collection("User").document(userId);
+
+        userRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot snapshot = task.getResult();
+                if (snapshot != null && snapshot.exists()) {
+                    List<String> usedCodes = (List<String>) snapshot.get("usedPromoCodes");
+                    if (usedCodes != null && usedCodes.contains(promoCode)) {
+                        Toast.makeText(this, "Promo code already used", Toast.LENGTH_SHORT).show();
+                    } else {
+                        awardPointsToUser(userId, points, promoCode);
+                    }
+                } else {
+                    Toast.makeText(this, "User document does not exist", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Error checking user data", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void awardPointsToUser(String userId, int points, String promoCode) {
+        DocumentReference userRef = firebaseFirestore.collection("User").document(userId);
+
+        firebaseFirestore.runTransaction(transaction -> {
+            DocumentSnapshot snapshot = transaction.get(userRef);
+            if (snapshot.exists()) {
+                long currentPoints = snapshot.contains("votingPoints") ? snapshot.getLong("votingPoints") : 0;
+                transaction.update(userRef, "votingPoints", currentPoints + points);
+
+                List<String> usedCodes = (List<String>) snapshot.get("usedPromoCodes");
+                if (usedCodes == null) {
+                    usedCodes = new ArrayList<>();
+                }
+                usedCodes.add(promoCode);
+                transaction.update(userRef, "usedPromoCodes", usedCodes);
+            } else {
+                throw new FirebaseFirestoreException("User document does not exist", FirebaseFirestoreException.Code.NOT_FOUND);
+            }
+            return points; // Return the number of points awarded
+        }).addOnSuccessListener(awardedPoints -> {
+            // Show dialog box upon successful points awarding with the points received
+            showSuccessDialog(awardedPoints);
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Error awarding points: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void showSuccessDialog(int points) {
+        // Inflate the custom layout
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_success, null);
+
+        // Find views in the custom layout and set data
+        ImageView successIcon = dialogView.findViewById(R.id.success_icon);
+        TextView successMessage = dialogView.findViewById(R.id.success_message);
+        TextView pointsAwarded = dialogView.findViewById(R.id.points_awarded);
+
+        // Update the message and points awarded
+        successMessage.setText("You have been awarded points!");
+        pointsAwarded.setText(points + " Points");
+
+        // Build and show the dialog with the custom view
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Hide the LinearLayout when the OK button is pressed
+                        promolin.setVisibility(View.GONE);
+                    }
+                })
+                .create();
+        dialog.show();
+
+
+
+    }
+
+
+
+    //*******************************************************************************************************
 
 
 
