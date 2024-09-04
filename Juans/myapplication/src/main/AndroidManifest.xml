@@ -20,7 +20,6 @@
             android:name=".TermsConditions"
             android:exported="false" />
         <activity
-
             android:name=".PurchaseTransactions"
             android:exported="false" />
         <activity
