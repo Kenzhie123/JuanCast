@@ -6,12 +6,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,18 +30,13 @@ public class RewardActivity extends AppCompatActivity {
     private RewardAdapter adapter;
     private List<Reward> rewardList;
     private FirebaseFirestore firebaseFirestore;
-    private FirebaseAuth firebaseAuth;  // Add FirebaseAuth instance
+    private FirebaseAuth firebaseAuth;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
-    private ImageView logo;
-
-
-
-    //navvar
+    private ImageView home;
     private ImageView Community;
     private ImageView Store;
     private ImageView Cast;
-    private ImageView home;
-
     private TextView cast;
     private TextView t_purchasebutton;
     private TextView promo;
@@ -57,9 +52,10 @@ public class RewardActivity extends AppCompatActivity {
         rewardList = new ArrayList<>();
         adapter = new RewardAdapter(rewardList);
         recyclerView.setAdapter(adapter);
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();  // Initialize FirebaseAuth
 
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
 
         home = findViewById(R.id.home);
         Community = findViewById(R.id.Community);
@@ -70,53 +66,41 @@ public class RewardActivity extends AppCompatActivity {
         t_purchasebutton = findViewById(R.id.t_purchasebutton);
         promo = findViewById(R.id.promo);
 
+        swipeRefreshLayout.setOnRefreshListener(() -> loadRewards());
 
+        // Trigger the refresh programmatically
+        swipeRefreshLayout.setRefreshing(true);
+        loadRewards();
 
-        //navvar
-
-        Community.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RewardActivity.this, PostActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0); // No animation
-            }
+        // Navigation variables
+        Community.setOnClickListener(v -> {
+            Intent intent = new Intent(RewardActivity.this, PostActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
         });
 
-        Store.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RewardActivity.this, StarStore.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0); // No animation
-            }
+        Store.setOnClickListener(v -> {
+            Intent intent = new Intent(RewardActivity.this, StarStore.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
         });
 
-        Cast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RewardActivity.this, Voting.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0); // No animation
-            }
+        Cast.setOnClickListener(v -> {
+            Intent intent = new Intent(RewardActivity.this, Voting.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
         });
 
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RewardActivity.this, Homepage.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0); // No animation
-            }
+        home.setOnClickListener(v -> {
+            Intent intent = new Intent(RewardActivity.this, Homepage.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
         });
 
-        cast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RewardActivity.this, Transactions.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0); // No animation
-            }
+        cast.setOnClickListener(v -> {
+            Intent intent = new Intent(RewardActivity.this, Transactions.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
         });
 
         t_purchasebutton.setOnClickListener(v -> {
@@ -130,15 +114,14 @@ public class RewardActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(0, 0); // No animation
         });
-
-        loadRewards();
     }
 
     private void loadRewards() {
-        String userId = firebaseAuth.getCurrentUser().getUid();  // Get current user ID
+        String userId = firebaseAuth.getCurrentUser() != null ? firebaseAuth.getCurrentUser().getUid() : null;
 
         if (userId == null) {
             Log.e("RewardActivity", "User ID is null. User may not be authenticated.");
+            swipeRefreshLayout.setRefreshing(false); // Stop the refreshing animation
             return;
         }
 
@@ -147,33 +130,32 @@ public class RewardActivity extends AppCompatActivity {
         firebaseFirestore.collection("AdViews")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<Reward> newRewards = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("RewardActivity", "Document ID: " + document.getId());
-                                Reward reward = document.toObject(Reward.class);
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<Reward> newRewards = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("RewardActivity", "Document ID: " + document.getId());
+                            Reward reward = document.toObject(Reward.class);
+                            if (reward != null) {
                                 newRewards.add(reward);
+                            } else {
+                                Log.w("RewardActivity", "Reward is null for document ID: " + document.getId());
                             }
-
-                            // Check the contents of newRewards
-                            Log.d("RewardActivity", "New rewards fetched: " + newRewards.size());
-
-                            // Prepend new rewards to the start of the list
-                            rewardList.addAll(0, newRewards);  // Insert new rewards at the beginning
-                            adapter.notifyDataSetChanged();    // Notify the adapter of data changes
-
-                            Log.d("RewardActivity", "Rewards successfully loaded. Total: " + rewardList.size());
-                        } else {
-                            Log.d("RewardActivity", "Error getting documents: ", task.getException());
                         }
+
+                        Log.d("RewardActivity", "New rewards fetched: " + newRewards.size());
+
+                        // Prepend new rewards to the start of the list
+                        rewardList.addAll(0, newRewards);  // Insert new rewards at the beginning
+                        adapter.notifyDataSetChanged();    // Notify the adapter of data changes
+
+                        Log.d("RewardActivity", "Rewards successfully loaded. Total: " + rewardList.size());
+                    } else {
+                        Log.e("RewardActivity", "Error getting documents: ", task.getException());
                     }
+
+                    // Stop the refreshing animation
+                    swipeRefreshLayout.setRefreshing(false);
                 });
     }
-
-
-
-
 }
