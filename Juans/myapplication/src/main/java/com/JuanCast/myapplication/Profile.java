@@ -34,6 +34,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -45,7 +46,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Profile extends AppCompatActivity {
@@ -366,6 +370,8 @@ public class Profile extends AppCompatActivity {
     }
 
     //*******************************************Promo Code************************************************************
+
+
     private void applyPromoCode() {
         String promoCode = editTextPromoCode.getText().toString().trim();
         if (!promoCode.isEmpty()) {
@@ -423,6 +429,7 @@ public class Profile extends AppCompatActivity {
 
     private void awardPointsToUser(String userId, int points, String promoCode) {
         DocumentReference userRef = firebaseFirestore.collection("User").document(userId);
+        DocumentReference redemptionRef = firebaseFirestore.collection("promoCodeRedemptions").document(); // Automatically generate a unique ID
 
         firebaseFirestore.runTransaction(transaction -> {
             DocumentSnapshot snapshot = transaction.get(userRef);
@@ -441,12 +448,27 @@ public class Profile extends AppCompatActivity {
             }
             return points; // Return the number of points awarded
         }).addOnSuccessListener(awardedPoints -> {
-            // Show dialog box upon successful points awarding with the points received
-            showSuccessDialog(awardedPoints);
+            // Create a map with redemption details
+            Map<String, Object> redemptionDetails = new HashMap<>();
+            redemptionDetails.put("userId", userId);
+            redemptionDetails.put("promoCode", promoCode);
+            redemptionDetails.put("pointsAwarded", awardedPoints);
+            redemptionDetails.put("date", Timestamp.now()); // Use Timestamp.now() to get the current timestamp
+
+            // Add the redemption details to Firestore
+            redemptionRef.set(redemptionDetails)
+                    .addOnSuccessListener(aVoid -> {
+                        // Show dialog box upon successful points awarding with the points received
+                        showSuccessDialog(awardedPoints);
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Error saving redemption details: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
         }).addOnFailureListener(e -> {
             Toast.makeText(this, "Error awarding points: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         });
     }
+
 
     private void showSuccessDialog(int points) {
         // Inflate the custom layout

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +34,8 @@ public class RewardActivity extends AppCompatActivity {
 
     private ImageView logo;
 
+
+
     //navvar
     private ImageView Community;
     private ImageView Store;
@@ -41,6 +44,7 @@ public class RewardActivity extends AppCompatActivity {
 
     private TextView cast;
     private TextView t_purchasebutton;
+    private TextView promo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +65,11 @@ public class RewardActivity extends AppCompatActivity {
         Community = findViewById(R.id.Community);
         Store = findViewById(R.id.Store);
         Cast = findViewById(R.id.Cast);
+
         cast = findViewById(R.id.cast);
         t_purchasebutton = findViewById(R.id.t_purchasebutton);
+        promo = findViewById(R.id.promo);
+
 
 
         //navvar
@@ -118,6 +125,12 @@ public class RewardActivity extends AppCompatActivity {
             overridePendingTransition(0, 0); // No animation
         });
 
+        promo.setOnClickListener(v -> {
+            Intent intent = new Intent(RewardActivity.this, RedemptionActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
         loadRewards();
     }
 
@@ -159,6 +172,8 @@ public class RewardActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 
 
 }

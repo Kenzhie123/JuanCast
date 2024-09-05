@@ -7,37 +7,39 @@
     android:background="@drawable/whitebackground"
     android:layout_margin="8dp">
 
+
     <TextView
         android:id="@+id/dateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date"
+        android:textColor="@color/black"
         android:fontFamily="@font/montserrat_bold"
-        android:textColor="#000000"
-        android:textSize="16sp"/>
-
-    <TextView
-        android:id="@+id/timeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Time"
-        android:fontFamily="@font/montserrat_regular"
-        android:textColor="#000000"
-        android:textSize="16sp"/>
+        android:text="Date" />
+
+
 
     <TextView
-        android:id="@+id/pointsTextView"
+        android:id="@+id/promoCodeTextView"
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reward Points"
         android:fontFamily="@font/montserrat_regular"
-        android:textColor="#000000"
-        android:textSize="16sp"
+        android:text="Promo Code" />
+
+    <TextView
+        android:id="@+id/pointsAwardedTextView"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="Points Awarded"
         android:layout_marginBottom="10dp"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
+        android:background="@android:color/black"
         android:layout_alignParentBottom="true" />
+
+
 </LinearLayout>

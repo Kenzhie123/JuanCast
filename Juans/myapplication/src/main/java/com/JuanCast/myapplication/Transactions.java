@@ -39,6 +39,7 @@ public class Transactions extends AppCompatActivity {
 
     private TextView ads;
     private TextView t_purchasebutton;
+    private TextView promo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +54,14 @@ public class Transactions extends AppCompatActivity {
 
         home = findViewById(R.id.home);
         profile = findViewById(R.id.profile);
-
         Community = findViewById(R.id.Community);
         Store = findViewById(R.id.Store);
         Cast = findViewById(R.id.Cast);
+
+
         ads = findViewById(R.id.ads);
         t_purchasebutton = findViewById(R.id.t_purchasebutton);
+        promo = findViewById(R.id.promo);
 
         fetchDataFromFirestore();
 
@@ -107,7 +110,15 @@ public class Transactions extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(0, 0); // No animation
         });
+
+        promo.setOnClickListener(v -> {
+            Intent intent = new Intent(Transactions.this, RedemptionActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
     }
+
+
 
     private void fetchDataFromFirestore() {
         // Get the current user ID

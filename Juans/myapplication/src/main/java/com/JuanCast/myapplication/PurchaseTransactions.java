@@ -47,6 +47,7 @@ public class PurchaseTransactions extends AppCompatActivity {
 
     private TextView ads;
     private TextView t_purchasebutton;
+    private TextView promo;
 
     private SwipeRefreshLayout PT_PurchaseListRefreshLayout;
 
@@ -124,6 +125,7 @@ public class PurchaseTransactions extends AppCompatActivity {
         Cast = findViewById(R.id.Cast);
         ads = findViewById(R.id.ads);
         t_purchasebutton = findViewById(R.id.t_purchasebutton);
+        promo = findViewById(R.id.promo);
         PT_PurchaseTransactionsRecyclerView = findViewById(R.id.PT_PurchaseTransactionsRecyclerView);
         PT_PurchaseListRefreshLayout = findViewById(R.id.PT_PurchaseListRefreshLayout);
 
@@ -172,6 +174,13 @@ public class PurchaseTransactions extends AppCompatActivity {
 
         ads.setOnClickListener(v -> {
             Intent intent = new Intent(PurchaseTransactions.this, RewardActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
+
+        promo.setOnClickListener(v -> {
+            Intent intent = new Intent(PurchaseTransactions.this, RedemptionActivity.class);
             startActivity(intent);
             overridePendingTransition(0, 0); // No animation
         });
