@@ -92,6 +92,13 @@ dependencies {
     implementation("com.android.billingclient:billing-ktx:$billing_version")
 
 
+    // Firebase BOM (Bill of Materials)
+    implementation(enforcedPlatform("com.google.firebase:firebase-bom:32.0.0"))
+
+    // WorkManager
+    implementation ("androidx.work:work-runtime:2.8.0")
+
+
 
 
 

@@ -37,6 +37,9 @@ public class RewardActivity extends AppCompatActivity {
     private ImageView Community;
     private ImageView Store;
     private ImageView Cast;
+    private ImageView profile;
+
+
     private TextView cast;
     private TextView t_purchasebutton;
     private TextView promo;
@@ -61,6 +64,7 @@ public class RewardActivity extends AppCompatActivity {
         Community = findViewById(R.id.Community);
         Store = findViewById(R.id.Store);
         Cast = findViewById(R.id.Cast);
+        profile = findViewById(R.id.profile);
 
         cast = findViewById(R.id.cast);
         t_purchasebutton = findViewById(R.id.t_purchasebutton);
@@ -81,6 +85,12 @@ public class RewardActivity extends AppCompatActivity {
 
         Store.setOnClickListener(v -> {
             Intent intent = new Intent(RewardActivity.this, StarStore.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
+        });
+
+        profile.setOnClickListener(v -> {
+            Intent intent = new Intent(RewardActivity.this, Profile.class);
             startActivity(intent);
             overridePendingTransition(0, 0); // No animation
         });

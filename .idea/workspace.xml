@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a275acaa-0e25-476e-bd1f-7298c4056c3b" name="Changes" comment="" />
+    <list default="true" id="a275acaa-0e25-476e-bd1f-7298c4056c3b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/java/com/JuanCast/myapplication/ResetVotingPointsWorker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Juans/myapplication/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Juans/myapplication/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Juans/myapplication/src/main/java/com/JuanCast/myapplication/RedemptionActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/java/com/JuanCast/myapplication/RedemptionActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Juans/myapplication/src/main/java/com/JuanCast/myapplication/RewardActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/java/com/JuanCast/myapplication/RewardActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Juans/myapplication/src/main/res/layout/activity_redemption.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/res/layout/activity_redemption.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
