@@ -18,13 +18,14 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class RedemptionActivity extends AppCompatActivity {
 
     private FirebaseFirestore firebaseFirestore;
     private RedemptionAdapter adapter;
     private RecyclerView recyclerView;
 
-    //navvar
     private ImageView Community;
     private ImageView Store;
     private ImageView Cast;
@@ -35,6 +36,7 @@ public class RedemptionActivity extends AppCompatActivity {
     private TextView t_purchasebutton;
     private TextView cast;
 
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,22 +46,15 @@ public class RedemptionActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
-
-
         home = findViewById(R.id.home);
         profile = findViewById(R.id.profile);
         Community = findViewById(R.id.Community);
         Store = findViewById(R.id.Store);
         Cast = findViewById(R.id.Cast);
 
-
         ads = findViewById(R.id.ads);
         t_purchasebutton = findViewById(R.id.t_purchasebutton);
         cast = findViewById(R.id.cast);
-
-
-        //navvar
 
         Community.setOnClickListener(v -> {
             Intent intent = new Intent(RedemptionActivity.this, PostActivity.class);
@@ -91,8 +86,6 @@ public class RedemptionActivity extends AppCompatActivity {
             overridePendingTransition(0, 0); // No animation
         });
 
-
-
         ads.setOnClickListener(v -> {
             Intent intent = new Intent(RedemptionActivity.this, RewardActivity.class);
             startActivity(intent);
@@ -111,15 +104,16 @@ public class RedemptionActivity extends AppCompatActivity {
             overridePendingTransition(0, 0); // No animation
         });
 
-
-
-
-
+        auth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
-        CollectionReference redemptionRef = firebaseFirestore.collection("promoCodeRedemptions");
 
-        // Query Firestore to get the latest redemptions first
-        Query query = redemptionRef.orderBy("date", Query.Direction.DESCENDING);
+        // Fetch current user ID
+        String currentUserId = auth.getCurrentUser().getUid();
+
+        // Query Firestore to get the latest redemptions for the current user
+        CollectionReference redemptionRef = firebaseFirestore.collection("promoCodeRedemptions");
+        Query query = redemptionRef.whereEqualTo("userId", currentUserId)
+                .orderBy("date", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<Redemption> options = new FirestoreRecyclerOptions.Builder<Redemption>()
                 .setQuery(query, Redemption.class)
@@ -128,6 +122,7 @@ public class RedemptionActivity extends AppCompatActivity {
         adapter = new RedemptionAdapter(options);
         recyclerView.setAdapter(adapter);
     }
+
     @Override
     protected void onStart() {
         super.onStart();
