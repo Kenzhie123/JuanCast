@@ -21,6 +21,8 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -61,6 +63,7 @@ public class PurchaseTransactions extends AppCompatActivity {
         firebaseFirestore.collection("transaction_history")
                 .whereEqualTo("user_id",firebaseAuth.getCurrentUser().getUid())
                 .whereIn("transaction_type", Arrays.asList("star_purchase","powerup_purchase"))
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

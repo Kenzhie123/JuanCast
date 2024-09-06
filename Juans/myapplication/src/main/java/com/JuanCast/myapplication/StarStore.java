@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.JuanCast.myapplication.Receiver.StarChangeReceiver;
 import com.JuanCast.myapplication.models.ProductStar;
@@ -84,10 +85,6 @@ public class StarStore extends AppCompatActivity {
 
     private ImageView logo;
 
-    private TextView tvSuns;
-    private TextView ads;
-    private TextView ups;
-
     private RelativeLayout noInternetLayout;
     private StarChangeReceiver networkChangeReceiver;
 
@@ -112,8 +109,13 @@ public class StarStore extends AppCompatActivity {
     private LinearLayout SS_MarketItem6;
 
     private TextView SS_Overlay;
+    private SwipeRefreshLayout SS_SwipeRefresh;
     private ProgressBar SS_ProgressBar;
     private ConstraintLayout SS_OverlayContainer;
+
+    private TextView tvSuns;
+    private TextView ads;
+    private TextView ups;
 
     BillingClient billingClient;
 
@@ -161,6 +163,8 @@ public class StarStore extends AppCompatActivity {
         SS_Overlay = findViewById(R.id.SS_Overlay);
         SS_ProgressBar = findViewById(R.id.SS_ProgressBar);
         SS_OverlayContainer = findViewById(R.id.SS_OverlayContainer);
+        SS_SwipeRefresh = findViewById(R.id.SS_SwipeRefresh);
+
 
 
         logo.setOnClickListener(new View.OnClickListener() {
@@ -217,7 +221,7 @@ public class StarStore extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-        TextView tvSuns = findViewById(R.id.tvSuns);
+        tvSuns = findViewById(R.id.tvSuns);
         tvSuns.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,7 +232,7 @@ public class StarStore extends AppCompatActivity {
             }
         });
 
-        TextView ads = findViewById(R.id.tvAds);
+        ads = findViewById(R.id.tvAds);
         ads.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,7 +243,7 @@ public class StarStore extends AppCompatActivity {
             }
         });
 
-        TextView ups = findViewById(R.id.tvPowerUps);
+        ups = findViewById(R.id.tvPowerUps);
         ups.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -303,6 +307,12 @@ public class StarStore extends AppCompatActivity {
             }
         });
 
+        SS_SwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadStarPoints(currentUserId,available_stars);
+            }
+        });
 
     }
 
@@ -342,19 +352,50 @@ public class StarStore extends AppCompatActivity {
                     } else {
                         available_stars.setText("User not found");
                     }
+                    SS_SwipeRefresh.setRefreshing(false);
                 })
                 .addOnFailureListener(e -> {
                     available_stars.setText("Failed to load voting points");
                     Log.e(TAG, "Error fetching voting points: " + e.getMessage());
+                    SS_SwipeRefresh.setRefreshing(false);
                 });
     }
 
     public void enable() {
-        SS_OverlayContainer.setVisibility(View.GONE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                SS_OverlayContainer.setVisibility(View.GONE);
+                SS_MarketItem1.setEnabled(true);
+                SS_MarketItem2.setEnabled(true);
+                SS_MarketItem3.setEnabled(true);
+                SS_MarketItem4.setEnabled(true);
+                SS_MarketItem5.setEnabled(true);
+                SS_MarketItem6.setEnabled(true);
+                tvSuns.setEnabled(true);
+                ads.setEnabled(true);
+                ups.setEnabled(true);
+            }
+        });
     }
 
     public void disable() {
-        SS_OverlayContainer.setVisibility(View.VISIBLE);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                SS_OverlayContainer.setVisibility(View.VISIBLE);
+                SS_MarketItem1.setEnabled(false);
+                SS_MarketItem2.setEnabled(false);
+                SS_MarketItem3.setEnabled(false);
+                SS_MarketItem4.setEnabled(false);
+                SS_MarketItem5.setEnabled(false);
+                SS_MarketItem6.setEnabled(false);
+                tvSuns.setEnabled(false);
+                ads.setEnabled(false);
+                ups.setEnabled(false);
+            }
+        });
     }
 
 
@@ -426,79 +467,88 @@ public class StarStore extends AppCompatActivity {
     }
 
     private void updateUserPurchase(List<String> productIDs) {
-        //Get current star amount depending on product ID
-        firebaseFirestore.collection("products").document("stars")
-                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        new ServerTime().addOnSuccessListener(new ServerTime.ServerTimeSuccessListener<Date>() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                disable();
+                //Get current star amount depending on product ID
+                firebaseFirestore.collection("products").document("stars")
+                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
-                            public void onSuccess(Date serverTime) {
-                                Map<String, Object> data = documentSnapshot.getData();
-                                long totalStarPurchased = 0;
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                new ServerTime().addOnSuccessListener(new ServerTime.ServerTimeSuccessListener<Date>() {
+                                    @Override
+                                    public void onSuccess(Date serverTime) {
+                                        Map<String, Object> data = documentSnapshot.getData();
+                                        long totalStarPurchased = 0;
 
-                                String productIds = "";
-                                for (String id : productIDs) {
-                                    for (Map.Entry<String, Object> products : data.entrySet()) {
-                                        Map<String, Object> productAttributes = (Map<String, Object>) products.getValue();
-                                        if (productAttributes.get("product_id").equals(id)) {
-                                            totalStarPurchased += (Long) productAttributes.get("star_amount");
-                                            productIds += (productIds.equals("") ? id : "," + id);
+                                        String productIds = "";
+                                        for (String id : productIDs) {
+                                            for (Map.Entry<String, Object> products : data.entrySet()) {
+                                                Map<String, Object> productAttributes = (Map<String, Object>) products.getValue();
+                                                if (productAttributes.get("product_id").equals(id)) {
+                                                    totalStarPurchased += (Long) productAttributes.get("star_amount");
+                                                    productIds += (productIds.equals("") ? id : "," + id);
+                                                }
+
+                                            }
+
                                         }
 
+                                        //Update user star amount
+                                        int currentTotalStars = Integer.parseInt(available_stars.getText().toString());
+                                        Map<String, Object> starUpdate = new HashMap<>();
+                                        starUpdate.put("votingPoints", (currentTotalStars + totalStarPurchased));
+                                        long finalTotalStarPurchased = totalStarPurchased;
+                                        firebaseFirestore.collection("User")
+                                                .document(currentUserId)
+                                                .update(starUpdate)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        Toast.makeText(getApplicationContext(), "Purchased successful", Toast.LENGTH_LONG).show();
+                                                        loadStarPoints(currentUserId,available_stars);
+                                                        enable();
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+
+                                        Map<String, Object> transactHistoryAdd = new HashMap<>();
+                                        transactHistoryAdd.put("reference_number", productIds);
+                                        transactHistoryAdd.put("star", totalStarPurchased);
+                                        transactHistoryAdd.put("sun", 0);
+                                        transactHistoryAdd.put("timestamp", new Timestamp(serverTime));
+                                        transactHistoryAdd.put("transaction_type", "star_purchase");
+                                        transactHistoryAdd.put("amount_charged", getPriceFromProductID(productIds));
+                                        transactHistoryAdd.put("user_id", currentUserId);
+                                        firebaseFirestore.collection("transaction_history").add(transactHistoryAdd)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        Log.d("TRANSACTIONTAG", documentReference.getId());
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+
+
+
+
                                     }
-
-                                }
-
-                                Map<String, Object> transactHistoryAdd = new HashMap<>();
-                                transactHistoryAdd.put("reference_number", productIds);
-                                transactHistoryAdd.put("star", totalStarPurchased);
-                                transactHistoryAdd.put("sun", 0);
-                                transactHistoryAdd.put("timestamp", new Timestamp(serverTime));
-                                transactHistoryAdd.put("transaction_type", "star_purchase");
-                                transactHistoryAdd.put("amount_charged", getPriceFromProductID(productIds));
-                                transactHistoryAdd.put("user_id", currentUserId);
-                                firebaseFirestore.collection("transaction_history").add(transactHistoryAdd)
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                Log.d("TRANSACTIONTAG", documentReference.getId());
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-
-                                //Update user star amount
-                                int currentTotalStars = Integer.parseInt(available_stars.getText().toString());
-                                Map<String, Object> starUpdate = new HashMap<>();
-                                starUpdate.put("votingPoints", (currentTotalStars + totalStarPurchased));
-                                long finalTotalStarPurchased = totalStarPurchased;
-                                firebaseFirestore.collection("User")
-                                        .document(currentUserId)
-                                        .update(starUpdate)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Toast.makeText(getApplicationContext(), "Purchased successful", Toast.LENGTH_LONG).show();
-                                                updateStarCount((int) (currentTotalStars + finalTotalStarPurchased));
-
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-
-
+                                });
                             }
                         });
-                    }
-                });
+            }
+        });
+
 
     }
 
