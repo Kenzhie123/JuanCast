@@ -214,7 +214,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="Daily stars Rewards\n20 Stars"
+                    android:text="Daily Rewards\n(Monday) 20 Stars"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold"/>
@@ -265,7 +265,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="Daily stars Rewards\n 20 Stars"
+                    android:text="Daily Rewards\n(Tuesday) 20 Stars"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold"/>
@@ -305,7 +305,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="Daily stars Rewards\n 20 Stars"
+                    android:text="Daily Rewards\n(Wednesday) 20 Stars"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold"/>
@@ -345,7 +345,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="Daily stars Rewards\n 20 Stars"
+                    android:text="Daily Rewards\n(Thursday) 20 Stars"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold"/>
@@ -385,7 +385,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="Daily stars Rewards\n 20 Stars"
+                    android:text="Daily Rewards\n(Friday) 20 Stars"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold"/>
@@ -425,7 +425,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="Daily stars Rewards\n 20 Stars"
+                    android:text="Daily Rewards\n(Saturday) 20 Stars"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold"/>
@@ -466,7 +466,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="Daily stars Rewards\n 20 Stars"
+                    android:text="Daily Rewards\n(Sunday) 20 Stars"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold"/>
