@@ -42,6 +42,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -56,6 +62,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -180,7 +187,6 @@ public class Homepage extends AppCompatActivity {
                             Long serverTime = snapshot.getValue(Long.class);
                             List<DocumentSnapshot> documents = task.getResult().getDocuments();
 
-<<<<<<< HEAD
                             ArrayList<Poll> tempRecentPolls = new ArrayList<>();
                             final Poll[] tempPoll = {null};
                             for(DocumentSnapshot document : documents)
@@ -206,178 +212,6 @@ public class Homepage extends AppCompatActivity {
                                     {
                                         tempPoll[0] = poll;
 
-=======
-                    ArrayList<Poll> tempRecentPolls = new ArrayList<>();
-                    Poll tempPoll = null;
-                    for(DocumentSnapshot document : documents)
-                    {
-                        Map<String,Object> data = document.getData();
-
-                        if(!Tools.dateTimeEnd((String)data.get("date_to"),(String)data.get("time_end")) && !((String)data.get("visibility")).equals("hidden"))
-                        {
-                            Poll poll = new Poll(
-                                    document.getId(),
-                                    (String) document.getData().get("poll_title"),
-                                    Tools.StringToDate((String) document.getData().get("date_from")),
-                                    Tools.StringToDate((String) document.getData().get("date_to")),
-                                    Tools.StringToTime((String)document.getData().get("time_end")),
-                                    (String) document.getData().get("note"),
-                                    (ArrayList<String>) document.getData().get("artists"),
-                                    (ArrayList<String>) document.getData().get("tag_list"),
-                                    (String) document.getData().get("poll_type"),
-                                    (String)document.getData().get("visibility"));
-
-                            if(tempPoll == null)
-                            {
-                                tempPoll = poll;
-                            }
-                            else
-                            {
-                                int compareValue = tempPoll.getDateTo().compareTo(poll.getDateTo());
-                                if(compareValue < 0)
-                                {
-                                    tempRecentPolls.clear();
-                                    tempPoll = poll;
-                                }
-                                else if(compareValue == 0)
-                                {
-                                    tempRecentPolls.add(tempPoll);
-                                    tempRecentPolls.add(poll);
-                                }
-                            }
-
-                        }
-
-                    }
-
-                    if(tempRecentPolls.isEmpty() && tempPoll != null)
-                    {
-                        tempRecentPolls.add(tempPoll);
-                    }
-
-                    if(!tempRecentPolls.isEmpty())
-                    {
-                        Random random = new Random();
-                        int randomNumber = random.nextInt(tempRecentPolls.size());
-                        Poll currentPoll = tempRecentPolls.get(randomNumber);
-                        H_LivePollBackground.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                openVotingSpec(currentPoll.getId());
-                            }
-                        });
-                        H_LivePollTitle.setText(currentPoll.getTitle());
-                        String voteType = (currentPoll.getPollType().equals("Major")?"sun_votes":"star_votes");
-
-                        ArrayList<Artist> artistList = new ArrayList<Artist>();
-                        firebaseFirestore.collection("artists").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                try{
-                                    if(task.isSuccessful())
-                                    {
-
-                                        for(DocumentSnapshot document : task.getResult())
-                                        {
-                                            Map<String,Object> data = document.getData();
-                                            artistList.add(new Artist(
-                                                    document.getId(),
-                                                    (String)data.get("artist_name"),
-                                                    (ArrayList<String>)data.get("tags")));
-                                        }
-
-                                        firebaseFirestore.collection("voting_polls")
-                                                .document(currentPoll.getId())
-                                                .collection("votes")
-                                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                                    @Override
-                                                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                                        if(error == null)
-                                                        {
-                                                            ArrayList<Map<String,Object>> idVotes = new ArrayList<>();
-
-                                                            for(DocumentSnapshot document : value.getDocuments())
-                                                            {
-
-                                                                Map<String,Object> data  = document.getData();
-                                                                Map<String,Object> tempMap = new HashMap<>();
-                                                                tempMap.put("votes",data.get(voteType));
-                                                                tempMap.put("artist_id",document.getId());
-                                                                idVotes.add(tempMap);
-                                                            }
-
-                                                            Collections.sort(idVotes, new Comparator<Map<String, Object>>() {
-                                                                @Override
-                                                                public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
-                                                                    return ((Long)t1.get("votes")).compareTo((Long)stringObjectMap.get("votes"));
-                                                                }
-                                                            });
-
-                                                            for(Artist artist : artistList)
-                                                            {
-                                                                if(idVotes.size() > 0)
-                                                                {
-                                                                    if(artist.getArtistID().equals(idVotes.get(0).get("artist_id")))
-                                                                    {
-                                                                        H_FPArtistName.setText(artist.getArtistName());
-                                                                        H_FPVoteCount.setText(String.valueOf(idVotes.get(0).get("votes")));
-
-                                                                        storage.getReference().child("artists").child(artist.getArtistID()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                            @Override
-                                                                            public void onSuccess(Uri uri) {
-                                                                                Glide.with(getApplicationContext()).load(uri).into(H_FPProfile);
-                                                                            }
-                                                                        });
-
-
-                                                                    }
-                                                                }
-                                                                if(idVotes.size() > 1)
-                                                                {
-                                                                    if(artist.getArtistID().equals(idVotes.get(1).get("artist_id")))
-                                                                    {
-                                                                        H_SPArtistName.setText(artist.getArtistName());
-                                                                        H_SPVoteCount.setText(String.valueOf(idVotes.get(1).get("votes")));
-
-                                                                        storage.getReference().child("artists").child(artist.getArtistID()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                            @Override
-                                                                            public void onSuccess(Uri uri) {
-                                                                                Glide.with(getApplicationContext()).load(uri).into(H_SPProfile);
-                                                                            }
-                                                                        });
-
-                                                                    }
-                                                                }
-                                                                if(idVotes.size() > 2)
-                                                                {
-                                                                    if(artist.getArtistID().equals(idVotes.get(2).get("artist_id")))
-                                                                    {
-                                                                        H_TPArtistName.setText(artist.getArtistName());
-                                                                        H_TPVoteCount.setText(String.valueOf(idVotes.get(2).get("votes")));
-
-                                                                        storage.getReference().child("artists").child(artist.getArtistID()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                            @Override
-                                                                            public void onSuccess(Uri uri) {
-                                                                                Glide.with(getApplicationContext()).load(uri).into(H_TPProfile);
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                }
-
-                                                            }
-
-
-
-
-                                                        }
-                                                        else
-                                                        {
-                                                            Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
-                                                            Log.d("DATATAG",error.getMessage().toString());
-                                                        }
-                                                    }
-                                                });
->>>>>>> parent of e87830a (Update)
                                     }
                                     else
                                     {
@@ -393,7 +227,11 @@ public class Homepage extends AppCompatActivity {
                                             tempRecentPolls.add(poll);
                                         }
                                     }
+
                                 }
+
+
+
 
                             }
 

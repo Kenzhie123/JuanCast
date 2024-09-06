@@ -40,6 +40,7 @@ public class RewardActivity extends AppCompatActivity {
     private ImageView home;
 
     private TextView cast;
+    private TextView t_purchasebutton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class RewardActivity extends AppCompatActivity {
         Store = findViewById(R.id.Store);
         Cast = findViewById(R.id.Cast);
         cast = findViewById(R.id.cast);
+        t_purchasebutton = findViewById(R.id.t_purchasebutton);
 
 
         //navvar
@@ -108,6 +110,12 @@ public class RewardActivity extends AppCompatActivity {
                 startActivity(intent);
                 overridePendingTransition(0, 0); // No animation
             }
+        });
+
+        t_purchasebutton.setOnClickListener(v -> {
+            Intent intent = new Intent(RewardActivity.this, PurchaseTransactions.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0); // No animation
         });
 
         loadRewards();

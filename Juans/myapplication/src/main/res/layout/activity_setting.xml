@@ -358,7 +358,38 @@
 
             </LinearLayout>
 
+
         </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="20dp">
+
+            <EditText
+                android:id="@+id/editTextPromoCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white"
+                android:textColorHint="@color/white"
+                android:hint="Enter Promo Code" />
+
+            <Button
+                android:id="@+id/buttonApplyPromoCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#66B32F"
+                android:textColor="@color/white"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Apply Promo Code" />
+        </LinearLayout>
+
+
 
         <Button
             android:id="@+id/deactivateButton"
@@ -368,9 +399,11 @@
             android:textColor="@color/white"
             android:backgroundTint="#FF0000"
             android:fontFamily="@font/montserrat_regular"
-            android:layout_marginTop="250dp" />
+            android:layout_marginTop="100dp" />
 
     </LinearLayout>
+
+
 
 
     <LinearLayout
@@ -488,4 +521,4 @@
     </LinearLayout>
 
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
