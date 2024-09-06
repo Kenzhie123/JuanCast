@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Logo ImageView -->
+    <ImageView
+        android:id="@+id/dialog_logo"
+        android:layout_width="165dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/horizontalblue" />
+
+    <!-- Title TextView -->
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Title"
+        android:textAlignment="center"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Message TextView -->
+    <TextView
+        android:id="@+id/dialog_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="Message"
+        android:layout_marginBottom="16dp" />
+
+    <!-- OK Button -->
+    <Button
+        android:background="#5271ff"
+        android:id="@+id/dialog_button_ok"
+        android:layout_width="73dp"
+        android:layout_height="36dp"
+        android:layout_gravity="end"
+        android:textColor="@color/white"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="OK" />
+
+
+</LinearLayout>

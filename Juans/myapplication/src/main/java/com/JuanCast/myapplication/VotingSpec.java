@@ -1,11 +1,9 @@
 package com.JuanCast.myapplication;
 
-import android.app.Dialog;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -22,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.JuanCast.myapplication.models.Artist;
 import com.JuanCast.myapplication.models.ServerTime;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -68,55 +65,7 @@ public class VotingSpec extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseStorage storage;
 
-
-
     ArrayList<ArtistVotes> artistList;
-
-    boolean pollEnded = false;
-    public void showWinnerPopup(ArtistVotes artist)
-    {
-        Dialog dialog = new Dialog(VotingSpec.this,R.style.CastDialog);
-        dialog.setContentView(R.layout.vs_winner_popup);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        ImageView VSWP_ArtistProfile = dialog.findViewById(R.id.VSWP_ArtistProfile);
-        TextView VSWP_ArtistName = dialog.findViewById(R.id.VSWP_ArtistName);
-        TextView VSWP_VoteCount = dialog.findViewById(R.id.VSWP_VoteCount);
-        Button VSWP_CloseButton = dialog.findViewById(R.id.VSWP_CloseButton);
-        ProgressBar VSWP_ProgressBar = dialog.findViewById(R.id.VSWP_ProgressBar);
-        VSWP_ArtistName.setText(artist.getArtistName());
-        VSWP_VoteCount.setText(String.valueOf(artist.getStarVotes() + artist.getSunVotes()));
-
-        storage.getReference().child("artists").child(artist.getArtistID()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true).addListener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                VSWP_ProgressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                VSWP_ProgressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        }).into(VSWP_ArtistProfile);
-            }
-        });
-
-        VSWP_CloseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
-
     public void setPollInfo()
     {
         artistList = new ArrayList<>();
@@ -148,16 +97,9 @@ public class VotingSpec extends AppCompatActivity {
                             VS_TitleText.setText(specPoll.getTitle());
                             VS_DateRangeText.setText(dateRange);
                             VS_NoteText.setText(specPoll.getNote());
-
-                            if((Tools.dateTimeEnd(serverTime,Tools.dateToString(specPoll.getDateTo()),Tools.timeToString(specPoll.getTimeEnd()))))
-                            {
-                                AP_PollEndedStatus.setVisibility(View.VISIBLE);
-                                pollEnded = true;
-                            }
-                            else
-                            {
-                                AP_PollEndedStatus.setVisibility(View.GONE);
-                            }
+                            AP_PollEndedStatus.setVisibility(
+                                    (Tools.dateTimeEnd(serverTime,Tools.dateToString(specPoll.getDateTo()),Tools.timeToString(specPoll.getTimeEnd()))?View.VISIBLE:View.GONE)
+                            );
 
                             storage.getReference().child("voting_poll_banners").child(pollID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
@@ -216,11 +158,6 @@ public class VotingSpec extends AppCompatActivity {
                                                 }
 
                                                 Collections.sort(artistList,Collections.reverseOrder());
-
-                                                if(pollEnded)
-                                                {
-                                                    showWinnerPopup(artistList.get(0));
-                                                }
                                                 VS_RefreshLayout.setRefreshing(false);
                                                 VS_ArtistsRecyclerView.setAdapter(
                                                         new VSArtistVoteListAdapter(

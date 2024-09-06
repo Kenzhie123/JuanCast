@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/juans"
+    tools:context=".PrivacyPolicy">
+
+    <LinearLayout
+        android:id="@+id/navtop"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_marginStart="15dp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Privacy Policy"
+            android:textColor="@color/black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="end">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:src="@drawable/cross" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
+        android:scrollbars="none">
+
+
+        <TextView
+            android:id="@+id/privacy_policy_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:textSize="12sp"
+            android:textColor="@android:color/white"
+            android:lineSpacingMultiplier="1.2"
+            android:padding="8dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="1. Introduction\n
+
+  Welcome to JuanCast, a platform designed by Filipinos for the Filipino community to choose, promote and showcase their idols.
+   At EMBM Services OPC, we respect your privacy and are committed to protecting your personal information. This Privacy Policy
+   explains how we collect, use, and disclose information about you when you use our app. \n\n
+2. Information We Collect\n
+Personal Information: When you register or sign up for JuanCast, we collect the following personal
+ information: Full Name, Birthdate, Gender, Username, Email,Mobile Number and Password. \n\n
+3. Purpose of Use \n
+We use the collected information for the following purposes: \n\n
+• To provide “Members” with a smooth “Service”. \n
+• To identify “Members” and prevent illegal use of “Service”. \n
+• To gather statistical data regarding the use of “Service”. \n
+• To conduct surveys and analysis necessary to improve the “Service”. \n
+• To confirm the identity of “Members” and provide a response to their inquiries. \n
+• To deliver important notices via e-mail or push notification. \n
+• To deliver advertising information via e-mail or push notification. \n
+• To deliver information (including ads) regarding customized “Service” of the “Company”.\n\n
+4. Sharing of Personal Information \n
+In principle, EMBM Services OPC does not provide the personal information of “Members” to outside parties without prior consent.
+ However, exceptions are made for the following cases:\n\n
+
+ 1. Partners and Service Providers:
+     \n   We may share your information with partners and service providers who support the smooth provision of “Service”. This includes technical infrastructure providers (e.g., servers) or companies that perform services on our behalf, such as engineering or other support, technical services and feature developers, research and analytics companies, and email providers.\n\n
+   2. Legal Requirements: We may disclose your \n
+   information if required by law, or if it is reasonably necessary for investigations, prevention,
+   or response actions related to suspected illegal or fraudulent activities, potential threats to personal safety, or violations
+    of our Privacy Policy or Terms and Conditions of Use. \n\n
+   3. Affiliates: \n
+   We may share data with affiliates for overall business\n
+    benefits and operational purposes. However, we do not currently engage with advertising technology providers. \n\n\n
+
+5. The Rights of Members and Their Exercise \n
+“Members” have the following rights:\n\n
+
+• Access and Correction: After registration, you cannot change any details except your password. If you need to change your password, you can use the 'Forget Password' option. \n\n
+• Account Deletion: “Members” can request to have their account deleted. The personal information that has been canceled or deleted
+ at the request of “Members” is processed according to the section on Retention of Information. Once deleted, this information cannot
+ be accessed or used for any other purpose.  \n\n
+
+6. Period of Retention and Use of Personal Information \n\n
+The personal information of “Members” is retained only for the period during which EMBM Services OPC provides the “Service” (Period of Use) and
+ for the dispute handling period (Period of Retention). Once “Members” delete their accounts successfully, their personal information is then destroyed
+  using a technical method that prevents reproduction.\n\n
+However, personal information may be stored for a required period of time if such information needs to be stored
+ according to relevant laws, if “Members” provided prior consent, if the retention period notified in advance is still
+ remaining, or if personal information is required to handle existing or potential disputes or lawsuits.\n\n
+
+In accordance with Philippine laws, the following retention periods apply: \n\n
+ACT ON THE CONSUMER PROTECTION IN ELECTRONIC COMMERCE, ETC.: \n\n
+• Records of contract or subscription withdrawal: 5 years\n
+• Records of payment and supply of goods: 5 years\n
+• Records of consumer complaints or disputes: 3 years\n\n
+ELECTRONIC FINANCIAL TRANSACTIONS ACT:\n
+• Records of financial transactions: 5 years\n\n
+PROTECTION OF COMMUNICATIONS SECRETS ACT:\n
+• Log-in history: 3 months\n\n
+Access to and use of personal information during these periods are restricted to the specified reasons.
+If personal information needs to be retained beyond these periods, EMBM Services OPC will notify “Members” and obtain their consent.\n\n
+
+7. Procedure and Method of Destruction of Personal Information\n\n
+EMBM Services OPC destroys personal information according to the following procedure and method:\n\n
+   1.Destruction Procedure: Once the purposes of collection and use of personal information as stipulated in this Privacy Policy have been
+   achieved, the personal information of users shall be destroyed in accordance with internal policies and relevant laws, following the Period of Retention
+   and Use of Personal Information. Such personal information shall not be used for any purpose other than preservation, except as required by law.\n\n
+
+
+2. Destruction Method: Personal information saved in electronic file format is deleted using a technical method that prevents reproduction. Printed personal information is shredded using a shredder.
+\n\n
+8. Technology and Management for Protection of Personal Information
+\n\n
+EMBM Services OPC takes the following measures to protect and manage personal information:
+\n\n
+1. Personnel Handling Personal Information: The number of employees handling personal information is kept to a minimum.\n
+2. Regular Self-Audits: Regular self-audits are conducted to ensure stable handling of personal information (once per quarter).\n
+3. Internal Management Plans: Internal management plans are designed and implemented to ensure safe processing of personal information.\n
+4. Encryption of Personal Information: Personal information of “Members” is processed with additional security measures, such as file and data encryption and file lock functions.\n
+5. Technical Measures Against Hacking: Security programs are installed, regularly updated, and inspected to prevent personal information from being leaked or damaged due to hacking or computer viruses. A system is installed in an access-restricted area to technically monitor and block hacking and computer viruses.\n
+6. Restricted Access to Personal Information: Necessary measures are taken to control access to personal information by granting, changing, and canceling access rights to the database system that processes personal information. An intrusion-prevention system is implemented to restrict unauthorized access from outside.\n
+7. Storage and Prevention of Forgery/Falsification of Access Records: Records of access to personal information are stored and managed for a minimum of 6 months, and security functions are implemented to ensure the access records are not forged, falsified, stolen, or lost.\n\n
+
+9. Children’s Privacy\n
+JuanCast is intended for users aged 18 years and older. This restriction is in place due to the ads running and
+spending activities within the app. We do not knowingly collect personal information from users under the age of 18.\n\n
+10. International Users\n
+Currently, JuanCast is only available to users in the Philippine market. We will update this privacy policy once the app becomes available internationally.\n\n
+
+11. Updates to This Privacy Policy\n
+We may update this Privacy Policy from time to time. We will notify users of any material changes by sending an email, making in-app announcements,
+and prompting users upon login to review the changes.\n\n
+
+12. Cookies and Tracking Technologies\n
+JuanCast does not use cookies or tracking technologies.\n\n
+
+13. User Consent\n
+By signing up for JuanCast, you agree to all the terms and conditions, data policies, and user policies outlined within the app.\n\n
+
+14. Contact Us\n
+If you have any questions or concerns about this Privacy Policy, please contact us at:\n\n
+EMBM Services OPC\n
+2E Glory of God Bldg., General Lim St., Brgy. San Antonio, Pasig City\n
+juancast.info@gmail.com
+
+
+
+\n\n
+" />
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
