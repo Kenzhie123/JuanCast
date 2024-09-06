@@ -67,5 +67,3 @@ public class Reward {
         this.timestamp = timestamp;
     }
 }
-
-

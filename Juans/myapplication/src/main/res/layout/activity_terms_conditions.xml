@@ -64,6 +64,7 @@
             android:id="@+id/privacy_policy_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:textSize="12sp"
             android:textColor="@android:color/white"
             android:lineSpacingMultiplier="1.2"
@@ -71,80 +72,142 @@
             android:fontFamily="@font/montserrat_regular"
             android:text="
 [Article 1] Purpose\n\n
-These Terms and Conditions outline the rights, obligations, and responsibilities of EMBM Services OPC (hereinafter referred to as the &quot;Company&quot;) and its users (hereinafter &quot;Members&quot;) concerning the use of the mobile and web service, JuanCast (hereinafter &quot;Service&quot;), developed and provided by the &quot;Company&quot;.\n\n\n
+These Terms and Conditions outline the rights, obligations, and responsibilities of EMBM Services OPC (hereinafter referred to as the 'Company') and its users (hereinafter 'Members') concerning the use of the mobile and web service, JuanCast (hereinafter 'Service'), developed and provided by the 'Company'.\n\n\n
+
+
 [Article 2] Definition\n\n
 The following terms are defined as used in these Terms and Conditions:\n
-1. Service: Refers to all services made available by the &quot;Company&quot; to &quot;Members&quot; regardless of the device used by &quot;Members&quot; (PC, smartphone, tablet, etc.).\n
-2. Members: Customers who access and use the &quot;Service&quot; provided by the &quot;Company&quot; and agree to these terms and conditions.\n
-User ID or Member ID: Refers to the email address of &quot;Members&quot; registered at the time of sign-up, used to identify &quot;Members&quot; and enable their use of the &quot;Service.&quot;\n
-3. Profile: Refers to the personal information of &quot;Members&quot; entered in the profile fields of &quot;Service,&quot; including the nickname and photo uploaded by &quot;Members&quot;.\n
-4. Points: Refers to in-app credits that may be purchased or earned by &quot;Members&quot; for use within the &quot;Service.&quot;\n
-5. Uploads: Refers to posts, comments, photos, or images posted or written by &quot;Members&quot;.\n\n
-[Article 3] Announcement of Terms and Conditions\n\n
-These Terms and Conditions become effective when notified to &quot;Members&quot; on the webpage of the &quot;Service&quot; or via other means.
-The &quot;Company&quot; may revise the Terms and Conditions, provided such changes comply with relevant laws, including the Civil Code of the Philippines, Electronic Commerce Act, and Data Privacy Act.
-Revisions that significantly affect the rights and obligations of &quot;Members&quot; will be announced 30 days prior to their effective date. &quot;Members&quot; may reject the revised Terms and Conditions and request to delete their account within 15 days of the announcement. Failure to do so will be considered acceptance of the changes.\n\n
-[Article 4] Interpretation of Terms and Conditions\n\n
-Matters not stipulated in these Terms and Conditions shall be governed by relevant Philippine laws, such as the Civil Code of the Philippines and Electronic Commerce Act.\n\n
-[Article 5] Conclusion of Contract of Use\n\n
-1. The service contract is concluded when the &quot;Company&quot; approves an individual’s request to use the service (sign-up request) after consenting to these Terms and Conditions and the Privacy Policy.\n\n
-2. By clicking the &quot;I consent&quot; button at the time of sign-up, individuals are deemed to have agreed to these Terms and Conditions and the Privacy Policy.\n\n
-3. The &quot;Company&quot; may refuse or terminate the service contract under certain conditions, such as failure to provide required information or violation of laws.\n\n
-4. &quot;Members&quot; shall use &quot;paid services&quot; after paying the applicable fees. The contract for &quot;Paid Service&quot; is concluded when &quot;Purchase Complete&quot; is indicated in the request process.\n\n
-5. The &quot;Company&quot; may withhold approval for reasons such as technical or operational problems, and must inform the applicant of such outcomes.\n\n\n
-[Article 6] Obligation to Protect Personal Information\n\n
-1. The &quot;Company&quot; will protect the personal information of &quot;Members&quot; in accordance with the Data Privacy Act. The Privacy Policy governs the protection and use of personal information.\n\n
-2. The &quot;Company&quot; shall not disclose or provide personal information to third parties without consent, except as required by law.\n\n
-3. &quot;Members&quot; agree that their personal information may be used in future &quot;Service&quot; offerings of the &quot;Company&quot;.\n\n\n
-[Article 7] Obligation to Manage Member ID\n\n
-1. The &quot;Company&quot; may restrict certain IDs to protect personal information or prevent confusion with &quot;Company&quot; administrators.\n\n
-2. &quot;Members&quot; shall not share their IDs with third parties.\n\n
-3. The &quot;Company&quot; is not liable for damages resulting from &quot;Members&quot; negligence in managing their ID or unauthorized use by third parties.\n\n\n
-[Article 8] Notice to Members\n\n
-1. The &quot;Company&quot; will notify &quot;Members&quot; through their registered email address or by posting on the &quot;Service&quot; notice board.\n\n
-2. Notices affecting all &quot;Members&quot; may be posted on the service's notice section for at least 7 days.\n\n\n
-[Article 9] Obligations of the Company\n\n
-1. The &quot;Company&quot; shall provide consistent and stable &quot;Service&quot; and will not engage in prohibited acts.\n\n
-2. A security system will be maintained to protect &quot;Members&quot; personal information, in compliance with the Data Privacy Act.\n\n
-3. The &quot;Company&quot; will address and notify &quot;Members&quot; of any complaints or issues related to service use.\n\n
-4. Key service information, including fees and terms, will be displayed on the first page of the &quot;Service&quot;.\n\n\n
-[Article 10] Obligations of Members\n\n
-1. &quot;Members&quot; shall not engage in illegal acts or activities that infringe on the rights of others, violate public order, or damage the reputation of the &quot;Company&quot;.\n\n
-2. Violations may result in service restrictions or account termination, with potential legal action taken.\n\n
-3. &quot;Members&quot; cannot transfer, donate, lend, or provide their service rights or status without prior consent from the &quot;Company&quot;.\n\n\n
-[Article 11] Provision of Service\n\n
-1. The &quot;Service&quot; is provided 24/7, except during scheduled maintenance or technical issues.\n\n
-2. The &quot;Company&quot; may temporarily suspend the &quot;Service&quot; for operational reasons, with prior notice given to &quot;Members&quot;.\n\n\n
-[Article 12] Change in Service\n\n
-1. The &quot;Company&quot; may change all or part of the &quot;Service&quot; for operational reasons, with at least 7 days' notice to &quot;Members&quot;.\n\n
-2. No compensation will be provided for changes, unless required by law.\n\n\n
-[Article 13] Provision of Information and Advertisements\n\n
-1. The &quot;Company&quot; may display advertisements and provide information to &quot;Members&quot; during their use of the &quot;Service&quot;.\n\n
-2. The &quot;Company&quot; is not liable for any loss or damage caused by interactions between &quot;Members&quot; and advertisers.\n\n\n
-[Article 14] Responsibility for Members’ Posts\n\n
-1. The &quot;Company&quot; may remove or restrict posts that violate laws, public order, or the rights of others.\n\n
-2. Detailed guidelines for posting may be established by the &quot;Company&quot;, and &quot;Members&quot; must comply with them.\n\n\n
-[Article 15] Management of Posts\n\n
-1. The &quot;Company&quot; may delete or restrict posts that violate laws or the rights of others.\n\n
-2. The &quot;Company&quot; may take action even without a request from a third party if it deems necessary.\n\n\n
-[Article 16] Deletion of Account\n\n
-1. &quot;Members&quot; may request account deletion at any time through the &quot;Service&quot; interface.\n\n
-2. Upon account deletion, all data and points held by the &quot;Member&quot; will be destroyed, unless retained in accordance with the Privacy Policy or relevant laws.\n\n\n
-[Article 17] Restrictions on Service Use\n\n
-1. The &quot;Company&quot; may restrict service use for violations of these Terms and Conditions.\n\n
-2. The &quot;Company&quot; may delete accounts for severe violations of laws or &quot;Service&quot; policies.\n\n
-3. &quot;Members&quot; may file an objection to service restrictions, which the &quot;Company&quot; will review.\n\n\n
-[Article 18] Limitation of Liability\n\n
-1. The &quot;Company&quot; is not liable for service interruptions due to natural disasters or other force majeure events.\n\n
-2. The &quot;Company&quot; is not responsible for issues caused by &quot;Members&quot; own actions.\n\n
-3. The &quot;Company&quot; is not liable for the accuracy or reliability of information posted by &quot;Members&quot;.\n\n\n
-[Article 19] Purchase of Paid Points\n\n
-1. &quot;Members&quot; may purchase points through various channels, which are used within the &quot;Service&quot;.\n\n
-2. Payments are processed through third-party payment gateways.\n\n\n
-[Article 20] Cancellation and Refund of Payment\n\n
-1. In principle, purchases of points are final and non-refundable, unless otherwise required by law or stated in the &quot;Service&quot; policies.\n\n
-" />
+1. Service: Refers to all services made available by the 'Company' to 'Members' regardless of the device used by 'Members' (PC, smartphone, tablet, etc.).\n
+2. Members: Customers who access and use the 'Service' provided by the 'Company' and agree to these terms and conditions.\n
+User ID or Member ID: Refers to the email address of 'Members' registered at the time of sign-up, used to identify 'Members' and enable their use of the 'Service.'\n
+3. Profile: Refers to the personal information of 'Members' entered in the profile fields of 'Service,' including the nickname and photo uploaded by 'Members.'\n
+4. Points: Refers to in-app credits that may be purchased or earned by 'Members' for use within the 'Service.'\n
+5. Uploads: Refers to posts, comments, photos, or images posted or written by 'Members.'\n\n
 
+[Article 3] Announcement of Terms and Conditions\n\nThese Terms and Conditions become effective when notified to 'Members' on the webpage of the 'Service' or via other means.
+The 'Company' may revise the Terms and Conditions, provided such changes comply with relevant laws, including the Civil Code of the Philippines, Electronic Commerce Act, and Data Privacy Act.
+Revisions that significantly affect the rights and obligations of 'Members' will be announced 30 days prior to their effective date. 'Members' may reject the revised Terms and Conditions and request to delete their account within 15 days of the announcement. Failure to do so will be considered acceptance of the changes.
+\n\n
+[Article 4] Interpretation of Terms and Conditions\n\n
+Matters not stipulated in these Terms and Conditions shall be governed by relevant Philippine laws, such as the Civil Code of the Philippines and Electronic Commerce Act.
+\n\n
+[Article 5] Conclusion of Contract of Use
+\n\n
+1. The service contract is concluded when the 'Company' approves an individual’s request to use the service (sign-up request) after consenting to these Terms and Conditions and the Privacy Policy.
+\n\n
+2. By clicking the 'I consent' button at the time of sign-up, individuals are deemed to have agreed to these Terms and Conditions and the Privacy Policy.
+\n\n
+3. The ''Company' may refuse or terminate the service contract under certain conditions, such as failure to provide required information or violation of laws.
+\n\n
+4. ‘Members‘ shall use ‘paid services‘ after paying the applicable fees. The contract for ‘Paid Service‘ is concluded when 'Purchase Complete' is indicated in the request process.
+\n\n
+5. The 'Company' may withhold approval for reasons such as technical or operational problems, and must inform the applicant of such outcomes.
+\n\n\n
+[Article 6] Obligation to Protect Personal Information
+\n\n
+1. The 'Company' will protect the personal information of 'Members' in accordance with the Data Privacy Act. The Privacy Policy governs the protection and use of personal information.
+\n\n
+2. The 'Company' shall not disclose or provide personal information to third parties without consent, except as required by law.
+\n\n
+3. 'Members' agree that their personal information may be used in future 'Service' offerings of the 'Company.'
+\n\n\n
+[Article 7] Obligation to Manage Member ID
+\n\n
+1. The 'Company' may restrict certain IDs to protect personal information or prevent confusion with 'Company' administrators.
+\n\n
+2. 'Members' shall not share their IDs with third parties.
+\n\n
+3. The 'Company' is not liable for damages resulting from 'Members' negligence in managing their ID or unauthorized use by third parties.
+\n\n\n
+[Article 8] Notice to Members
+\n\n
+1. The 'Company' will notify 'Members' through their registered email address or by posting on the 'Service' notice board.
+\n\n
+2. Notices affecting all 'Members' may be posted on the service's notice section for at least 7 days.
+\n\n\n
+[Article 9] Obligations of the Company
+\n\n
+1. The 'Company' shall provide consistent and stable 'Service' and will not engage in prohibited acts.
+\n\n
+2. A security system will be maintained to protect 'Members' personal information, in compliance with the Data Privacy Act.
+\n\n
+3. The 'Company' will address and notify 'Members' of any complaints or issues related to service use.
+\n\n
+4. Key service information, including fees and terms, will be displayed on the first page of the 'Service.'
+\n\n\n
+[Article 10] Obligations of Members
+\n\n
+1. 'Members' shall not engage in illegal acts or activities that infringe on the rights of others, violate public order, or damage the reputation of the'Company.'
+\n\n
+2. Violations may result in service restrictions or account termination, with potential legal action taken.
+\n\n
+3. 'Members' cannot transfer, donate, lend, or provide their service rights or status without prior consent from the 'Company.'
+\n\n\n
+[Article 11] Provision of Service
+\n\n
+1. The 'Service' is provided 24/7, except during scheduled maintenance or technical issues.
+\n\n
+2. The 'Company' may temporarily suspend the 'Service' for operational reasons, with prior notice given to 'Members.'
+\n\n\n
+[Article 12] Change in Service
+\n\n
+1. The 'Company' may change all or part of the 'Service' for operational reasons, with at least 7 days' notice to 'Members.'
+\n\n
+2. No compensation will be provided for changes, unless required by law.
+\n\n\n
+[Article 13] Provision of Information and Advertisements
+\n\n
+1. The 'Company' may display advertisements and provide information to 'Members' during their use of the 'Service.'
+\n\n
+2. The 'Company' is not liable for any loss or damage caused by interactions between 'Members' and advertisers.
+\n\n\n
+[Article 14] Responsibility for Members’ Posts
+\n\n
+1. The 'Company' may remove or restrict posts that violate laws, public order, or the rights of others.
+\n\n
+2. Detailed guidelines for posting may be established by the 'Company,' and 'Members' must comply with them.
+\n\n\n
+[Article 15] Management of Posts
+\n\n
+1. The 'Company' may delete or restrict posts that violate laws or the rights of others.
+\n\n
+2. The 'Company' may take action even without a request from a third party if it deems necessary.
+\n\n\n
+[Article 16] Deletion of Account
+\n\n
+1. 'Members' may request account deletion at any time through the 'Service' interface.
+\n\n
+2. Upon account deletion, all data and points held by the 'Member' will be destroyed, unless retained in accordance with the Privacy Policy or relevant laws.
+\n\n\n
+[Article 17] Restrictions on Service Use
+\n\n
+1. The 'Company' may restrict service use for violations of these Terms and Conditions.
+\n\n
+2. The 'Company' may delete accounts for severe violations of laws or 'Service' policies.
+\n\n
+3. 'Members' may file an objection to service restrictions, which the 'Compan' will review.
+\n\n\n
+[Article 18] Limitation of Liability
+\n\n
+1. The 'Company' is not liable for service interruptions due to natural disasters or other force majeure events.
+\n\n
+2. The 'Company' is not responsible for issues caused by 'Members'  own actions.
+\n\n
+3. The 'Company' is not liable for the accuracy or reliability of information posted by'Members.'
+\n\n\n
+[Article 19] Purchase of Paid Points
+\n\n
+1. 'Members' may purchase points through various channels, which are used within the'Service.'
+\n\n
+2. Payments are processed through third-party payment gateways.
+\n\n\n
+[Article 20] Cancellation and Refund of Payment
+\n\n
+1. In principle, purchases of points are final and non-refundable, unless otherwise required by law or stated in the'Service' policies.
+
+
+\n\n
+" />
 
     </ScrollView>
 
