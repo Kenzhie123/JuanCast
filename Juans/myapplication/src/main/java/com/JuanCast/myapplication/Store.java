@@ -2,7 +2,6 @@ package com.JuanCast.myapplication;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -133,7 +131,7 @@ public class Store extends AppCompatActivity {
                     return;
                 }
 
-                // Calculate required stars
+                // Each sun requires 200 stars
                 int requiredStars = sunsToConvert * 200;
 
                 // Retrieve available stars and suns from TextViews
@@ -147,45 +145,22 @@ public class Store extends AppCompatActivity {
                     return;
                 }
 
-                if (requiredStars > availableStars) {
+                if (requiredStars <= availableStars) {
+                    int updatedSuns = availableSuns + sunsToConvert;
+                    int remainingStars = availableStars - requiredStars;
+
+                    // Update UI
+                    tvEquivalentSuns.setText(""+requiredStars);
+                    tvAvailableStars.setText(String.valueOf(remainingStars));
+                    tvAvailableSuns.setText(String.valueOf(updatedSuns));
+
+                    // Update Firestore
+                    updateStarsAndSuns(currentUserId, remainingStars, updatedSuns);
+                } else {
                     showCustomToast("Not enough stars available.", R.drawable.juanscast);
-                    return;
                 }
-
-                // Create and show confirmation dialog
-                new AlertDialog.Builder(Store.this)
-                        .setTitle("Confirm Conversion")
-                        .setMessage("Are you sure you want to convert " + sunsToConvert + " suns? This will use " + requiredStars + " stars.")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // User confirmed, proceed with the conversion
-                                int updatedSuns = availableSuns + sunsToConvert;
-                                int remainingStars = availableStars - requiredStars;
-
-                                // Update UI
-                                tvEquivalentSuns.setText(String.valueOf(requiredStars));
-                                tvAvailableStars.setText(String.valueOf(remainingStars));
-                                tvAvailableSuns.setText(String.valueOf(updatedSuns));
-
-                                // Update Firestore
-                                updateStarsAndSuns(currentUserId, remainingStars, updatedSuns);
-
-                                // Clear the EditText input
-                                etSuns.setText("");
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // User canceled, do nothing
-                            }
-                        })
-                        .show();
             }
         });
-
-
 
 
         etSuns.addTextChangedListener(new TextWatcher() {

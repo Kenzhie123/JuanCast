@@ -5,12 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -254,22 +249,16 @@ public class SignUp extends AppCompatActivity {
         binding.learnMORE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // URL of the website you want to open
-                String url = "https://juancast.ph/";
-
-                // Create an intent to view the URL
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url));
-
-                // Start the activity to handle the intent
+                Intent intent = new Intent(SignUp.this, LearnMore.class);
                 startActivity(intent);
+                overridePendingTransition(0, 0); // Walang animation
             }
         });
 
         binding.Datapolicy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SignUp.this, PrivacySignup.class);
+                Intent intent = new Intent(SignUp.this, LearnMore.class);
                 startActivity(intent);
                 overridePendingTransition(0, 0); // Walang animation
             }
@@ -282,44 +271,7 @@ public class SignUp extends AppCompatActivity {
                 showDatePickerDialog();
             }
         });
-
-
-        TextView termsTextView = findViewById(R.id.termsTextView);
-
-        String text = "I certify that I have read and accept the Terms of Use and Privacy Statement and I have read and understand the Rate Description and Rate Rules for my reservation.";
-
-        SpannableString spannableString = new SpannableString(text);
-
-        // Terms of Use
-        int startTerms = text.indexOf("Terms of Use");
-        int endTerms = startTerms + "Terms of Use".length();
-        spannableString.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                // Handle click for "Terms of Use"
-                Intent intent = new Intent(SignUp.this,TermsSignup.class);
-                overridePendingTransition(0, 0); // No animation
-                startActivity(intent);
-            }
-        }, startTerms, endTerms, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        // Privacy Statement
-        int startPrivacy = text.indexOf("Privacy Statement");
-        int endPrivacy = startPrivacy + "Privacy Statement".length();
-        spannableString.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                // Handle click for "Privacy Statement"
-                Intent intent = new Intent(SignUp.this, PrivacySignup.class);
-                overridePendingTransition(0, 0); // No animation
-                startActivity(intent);
-            }
-        }, startPrivacy, endPrivacy, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        termsTextView.setText(spannableString);
-        termsTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
-
 
 
 
