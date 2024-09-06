@@ -87,6 +87,24 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Voting Period"
+                android:textColor="@color/text_color_dark"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.3" />
+
+            <TextView
                 android:id="@+id/PLI_DateRange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -98,13 +116,13 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/PLI_Title"
                 app:layout_constraintTop_toBottomOf="@+id/PLI_Title"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.3" />
 
             <TextView
                 android:id="@+id/textView24"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginTop="5dp"
+
                 android:background="@drawable/microphone_2_svgrepo_com"
                 android:backgroundTint="@color/primary"
                 app:layout_constraintBottom_toBottomOf="parent"

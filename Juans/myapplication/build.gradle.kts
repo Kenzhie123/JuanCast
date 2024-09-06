@@ -12,7 +12,7 @@ android {
         applicationId = "com.JuanCast.myapplication"
         minSdk = 24
         targetSdk = 34
-        versionCode = 10
+        versionCode = 40
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -90,6 +90,13 @@ dependencies {
 
     val billing_version = "7.0.0"
     implementation("com.android.billingclient:billing-ktx:$billing_version")
+
+
+    // Firebase BOM (Bill of Materials)
+    implementation(enforcedPlatform("com.google.firebase:firebase-bom:32.0.0"))
+
+    // WorkManager
+    implementation ("androidx.work:work-runtime:2.8.0")
 
 
 
