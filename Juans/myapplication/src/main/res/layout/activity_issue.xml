@@ -142,9 +142,9 @@
 
             android:fontFamily="@font/montserrat_regular"
             android:text="
-1. Please ensure that all information provided is accurate and complete. Incorrect or incomplete information may delay the resolution of your issue.\n\n
-2. All submissions will be reviewed before action is taken. Please be patient as our team carefully evaluates each issue to ensure a thorough response.\n\n
-3. Submitting an issue does not guarantee immediate resolution or a specific outcome. We strive to address all concerns promptly but cannot guarantee a resolution timeline."
+(1) Please ensure that all information provided is accurate and complete. Incorrect or incomplete information may delay the resolution of your issue.\n\n
+(2) All submissions will be reviewed before action is taken. Please be patient as our team carefully evaluates each issue to ensure a thorough response.\n\n
+(3) Submitting an issue does not guarantee immediate resolution or a specific outcome. We strive to address all concerns promptly but cannot guarantee a resolution timeline."
             android:layout_marginTop="5dp"
             android:layout_marginBottom="16dp"/>
     </LinearLayout>

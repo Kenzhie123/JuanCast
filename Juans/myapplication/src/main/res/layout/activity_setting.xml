@@ -358,13 +358,7 @@
 
             </LinearLayout>
 
-
         </LinearLayout>
-
-
-
-
-
 
         <Button
             android:id="@+id/deactivateButton"
@@ -377,8 +371,6 @@
             android:layout_marginTop="250dp" />
 
     </LinearLayout>
-
-
 
 
     <LinearLayout
@@ -496,4 +488,4 @@
     </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>

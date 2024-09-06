@@ -502,7 +502,7 @@
         android:layout_margin="16dp"
         android:fontFamily="@font/montserrat_regular"
         android:padding="20dp"
-        android:text="1. Advertisements shown are not in any way connected to JuanCast.\n2. Reward will be given every accomplished/finished video ad.\n3. Once limit is reached to all ads, the counter will refresh on the next day at 12:00AM PST.\n4. All stars awarded will be valid for only 1 month."
+        android:text="(1) Advertisements shown are not in anyway connected to JuanCast.\n(2) Reward will be given every accomplished/finished video ad.\n(3) Once limit is reached to all ads, the counter will refresh on the next day at 12:00AM PST.\n(4) All stars awarded will be valid for only 1 month."
         android:textColor="#ffffff"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"

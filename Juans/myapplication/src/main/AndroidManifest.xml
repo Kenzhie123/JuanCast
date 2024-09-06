@@ -17,22 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Juans">
         <activity
-            android:name=".MonthResetPoints"
-            android:exported="false" />
-        <activity
-            android:name=".RedemptionActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PrivacySignup"
-            android:exported="false" />
-        <activity
-            android:name=".TermsSignup"
-            android:exported="false" />
-        <activity
             android:name=".TermsConditions"
-            android:exported="false" />
-        <activity
-            android:name=".PurchaseTransactions"
             android:exported="false" />
         <activity
             android:name=".Notices"
