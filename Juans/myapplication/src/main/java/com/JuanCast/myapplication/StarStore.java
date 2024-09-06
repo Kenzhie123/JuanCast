@@ -166,6 +166,7 @@ public class StarStore extends AppCompatActivity {
         SS_SwipeRefresh = findViewById(R.id.SS_SwipeRefresh);
 
 
+
         logo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -312,7 +313,6 @@ public class StarStore extends AppCompatActivity {
                 loadStarPoints(currentUserId,available_stars);
             }
         });
-
 
     }
 

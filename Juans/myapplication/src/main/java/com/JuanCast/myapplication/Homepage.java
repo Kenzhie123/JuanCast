@@ -236,11 +236,7 @@ public class Homepage extends AppCompatActivity {
                                             tempRecentPolls.add(poll);
                                         }
                                     }
-
                                 }
-
-
-
 
                             }
 
