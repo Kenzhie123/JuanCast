@@ -59,6 +59,7 @@ public class VotingSpec extends AppCompatActivity {
     TextView VS_UserWelcomeText;
     TextView VS_StarCount;
     TextView VS_SunCount;
+    TextView VS_PollType;
     RecyclerView VS_ArtistsRecyclerView;
     String pollID;
     ProgressBar VS_BannerProgressBar;
@@ -145,9 +146,11 @@ public class VotingSpec extends AppCompatActivity {
                                     Tools.dateToString(specPoll.getDateFrom(),"MMMM d, yyyy") +
                                             "-" + Tools.dateToString(specPoll.getDateTo(),"MMMM d, yyyy")
                                             + " " + Tools.timeToString(specPoll.getTimeEnd());
+                            String pollTypeText  = specPoll.getPollType() + " Poll";
                             VS_TitleText.setText(specPoll.getTitle());
                             VS_DateRangeText.setText(dateRange);
                             VS_NoteText.setText(specPoll.getNote());
+                            VS_PollType.setText(pollTypeText);
 
                             if((Tools.dateTimeEnd(serverTime,Tools.dateToString(specPoll.getDateTo()),Tools.timeToString(specPoll.getTimeEnd()))))
                             {
@@ -294,6 +297,7 @@ public class VotingSpec extends AppCompatActivity {
         VS_UserWelcomeText = findViewById(R.id.VS_UserWelcomeText);
         VS_StarCount = findViewById(R.id.VS_StarCount);
         VS_SunCount = findViewById(R.id.VS_SunCount);
+        VS_PollType = findViewById(R.id.VS_PollType);
 
         try{
             pollID = getIntent().getExtras().getString("pollID");

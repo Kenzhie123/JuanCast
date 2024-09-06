@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,6 +57,7 @@ public class PollListAdapter extends RecyclerView.Adapter<PollListAdapter.PollLi
     @Override
     public void onBindViewHolder(@NonNull PollListViewHolder holder, int position) {
         Poll specPoll = pollList.get(position);
+
         StorageReference storageRef = storage.getReference();
         storageRef.child("voting_poll_banners").child(specPoll.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -79,7 +81,17 @@ public class PollListAdapter extends RecyclerView.Adapter<PollListAdapter.PollLi
         });
 
         holder.PLI_BannerProgressBar.setVisibility(View.VISIBLE);
-
+        String pollTypeText = specPoll.getPollType() + " Poll";
+        if(specPoll.getPollType().equals("Minor"))
+        {
+            holder.PLI_PollTypeIcon.setBackground(AppCompatResources.getDrawable(context,R.drawable.star));
+            holder.PLI_PollType.setText(pollTypeText);
+        }
+        else if(specPoll.getPollType().equals("Major"))
+        {
+            holder.PLI_PollTypeIcon.setBackground(AppCompatResources.getDrawable(context,R.drawable.sun_version2));
+            holder.PLI_PollType.setText(pollTypeText);
+        }
 
         holder.PLI_Title.setText(specPoll.getTitle());
         String dateRange = Tools.dateToString(specPoll.getDateFrom(),"MMMM d, yyyy") + "-" + Tools.dateToString(specPoll.getDateTo(),"MMMM d, yyyy");
@@ -110,6 +122,8 @@ public class PollListAdapter extends RecyclerView.Adapter<PollListAdapter.PollLi
         TextView PLI_ArtistCount;
         ProgressBar PLI_BannerProgressBar;
         ConstraintLayout PLI_Background;
+        TextView PLI_PollType;
+        TextView PLI_PollTypeIcon;
         public PollListViewHolder(@NonNull View itemView) {
             super(itemView);
             PLI_Banner = itemView.findViewById(R.id.PLI_Banner);
@@ -118,6 +132,8 @@ public class PollListAdapter extends RecyclerView.Adapter<PollListAdapter.PollLi
             PLI_ArtistCount = itemView.findViewById(R.id.PLI_ArtistCount);
             PLI_BannerProgressBar = itemView.findViewById(R.id.PLI_BannerProgressBar);
             PLI_Background = itemView.findViewById(R.id.PLI_Background);
+            PLI_PollType = itemView.findViewById(R.id.PLI_PollType);
+            PLI_PollTypeIcon = itemView.findViewById(R.id.PLI_PollTypeIcon);
         }
     }
 

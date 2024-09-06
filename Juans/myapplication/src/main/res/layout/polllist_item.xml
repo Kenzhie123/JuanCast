@@ -146,6 +146,33 @@
                 app:layout_constraintStart_toEndOf="@+id/textView24"
                 app:layout_constraintTop_toTopOf="@+id/textView24" />
 
+            <TextView
+                android:id="@+id/PLI_PollType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="Minor Poll"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/PLI_PollTypeIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/PLI_PollTypeIcon"
+                app:layout_constraintTop_toTopOf="@+id/PLI_PollTypeIcon" />
+
+            <TextView
+                android:id="@+id/PLI_PollTypeIcon"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/sun_version2"
+                android:backgroundTint="@color/primary"
+                app:layout_constraintBottom_toBottomOf="@+id/PLI_ArtistCount"
+                app:layout_constraintEnd_toStartOf="@+id/PLI_PollType"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/PLI_ArtistCount"
+                app:layout_constraintTop_toTopOf="@+id/PLI_ArtistCount" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
