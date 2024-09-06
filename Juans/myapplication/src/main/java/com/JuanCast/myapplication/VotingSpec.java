@@ -21,12 +21,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-<<<<<<< HEAD
+
 import com.JuanCast.myapplication.models.Artist;
 import com.JuanCast.myapplication.models.ServerTime;
-=======
-
->>>>>>> parent of e87830a (Update)
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -47,6 +44,7 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -127,49 +125,22 @@ public class VotingSpec extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful())
                 {
-                    Map<String, Object> data = task.getResult().getData();
-
-                    Poll specPoll = new Poll(task.getResult().getId(),
-                            (String)data.get("poll_title"),
-                            Tools.StringToDate((String)data.get("date_from")),
-                            Tools.StringToDate((String)data.get("date_to")),
-                            Tools.StringToTime((String)data.get("time_end")),
-                            (String) data.get("note"),
-                            (ArrayList<String>)data.get("artists"),
-                            (ArrayList<String>)data.get("tag_list"),
-                            (String)data.get("poll_type"),
-                            (String)data.get("visibility"));
-
-                    String dateRange =
-                            Tools.dateToString(specPoll.getDateFrom(),"MMMM d, yyyy") +
-                                    "-" + Tools.dateToString(specPoll.getDateTo(),"MMMM d, yyyy")
-                                    + " " + Tools.timeToString(specPoll.getTimeEnd());
-                    VS_TitleText.setText(specPoll.getTitle());
-                    VS_DateRangeText.setText(dateRange);
-                    VS_NoteText.setText(specPoll.getNote());
-                    AP_PollEndedStatus.setVisibility(
-                            (Tools.dateTimeEnd(Tools.dateToString(specPoll.getDateTo()),Tools.timeToString(specPoll.getTimeEnd()))?View.VISIBLE:View.GONE)
-                    );
-
-                    storage.getReference().child("voting_poll_banners").child(pollID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    new ServerTime().addOnSuccessListener(new ServerTime.ServerTimeSuccessListener<Date>() {
                         @Override
-                        public void onSuccess(Uri uri) {
-                            Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true).addListener(new RequestListener<Drawable>() {
-                                        @Override
-                                        public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
-                                            VS_BannerProgressBar.setVisibility(View.GONE);
-                                            return false;
-                                        }
+                        public void onSuccess(Date serverTime) {
+                            Map<String, Object> data = task.getResult().getData();
 
-                                        @Override
-                                        public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
-                                            VS_BannerProgressBar.setVisibility(View.GONE);
-                                            return false;
-                                        }
-                                    }).into(VS_BannerImage);
+                            Poll specPoll = new Poll(task.getResult().getId(),
+                                    (String)data.get("poll_title"),
+                                    Tools.StringToDate((String)data.get("date_from")),
+                                    Tools.StringToDate((String)data.get("date_to")),
+                                    Tools.StringToTime((String)data.get("time_end")),
+                                    (String) data.get("note"),
+                                    (ArrayList<String>)data.get("artists"),
+                                    (ArrayList<String>)data.get("tag_list"),
+                                    (String)data.get("poll_type"),
+                                    (String)data.get("visibility"));
 
-<<<<<<< HEAD
                             String dateRange =
                                     Tools.dateToString(specPoll.getDateFrom(),"MMMM d, yyyy") +
                                             "-" + Tools.dateToString(specPoll.getDateTo(),"MMMM d, yyyy")
@@ -209,6 +180,8 @@ public class VotingSpec extends AppCompatActivity {
                                 }
                             });
 
+
+
                             db.collection("artists").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot artistQuerySnapShot) {
@@ -244,7 +217,6 @@ public class VotingSpec extends AppCompatActivity {
 
                                                 Collections.sort(artistList,Collections.reverseOrder());
 
-
                                                 if(pollEnded)
                                                 {
                                                     showWinnerPopup(artistList.get(0));
@@ -270,68 +242,9 @@ public class VotingSpec extends AppCompatActivity {
 
                                 }
                             });
-=======
->>>>>>> parent of e87830a (Update)
                         }
                     });
 
-
-
-                    db.collection("artists").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot artistQuerySnapShot) {
-
-                            if(!artistQuerySnapShot.isEmpty())
-                            {
-                                VS_RefreshLayout.setRefreshing(true);
-                                db.collection("voting_polls").document(pollID).collection("votes").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onSuccess(QuerySnapshot votingPollQuerySnapshot) {
-
-                                        for(DocumentSnapshot artistDoc : artistQuerySnapShot.getDocuments())
-                                        {
-                                            Map<String,Object> data = artistDoc.getData();
-
-                                            if(specPoll.getArtistIDList().contains(artistDoc.getId()))
-                                            {
-                                                for(DocumentSnapshot votingPollDoc: votingPollQuerySnapshot.getDocuments())
-                                                {
-                                                    if(votingPollDoc.getId().equals(artistDoc.getId()))
-                                                    {
-                                                        artistList.add(new ArtistVotes(artistDoc.getId(),
-                                                                (String)data.get("artist_name"),
-                                                                (ArrayList<String>)data.get("tags"),
-                                                                (long)votingPollDoc.getData().get("sun_votes"),
-                                                                (long)votingPollDoc.getData().get("star_votes")));
-                                                    }
-                                                }
-
-
-                                            }
-                                        }
-
-                                        Collections.sort(artistList,Collections.reverseOrder());
-                                        VS_RefreshLayout.setRefreshing(false);
-                                        VS_ArtistsRecyclerView.setAdapter(
-                                                new VSArtistVoteListAdapter(
-                                                        VotingSpec.this,
-                                                        artistList,
-                                                        FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                                                        pollID,specPoll.getPollType(),
-                                                        (Tools.dateTimeEnd(Tools.dateToString(specPoll.getDateTo()),Tools.timeToString(specPoll.getTimeEnd())))));
-                                        VS_ArtistsRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                                        VS_ArtistListProgressBar.setVisibility(View.GONE);
-                                    }
-                                });
-
-
-
-                            }
-
-
-
-                        }
-                    });
                 }
             }
         });
