@@ -146,7 +146,7 @@ public class Issue extends AppCompatActivity {
         String description = descriptionEditText.getText().toString();
 
         if (subject.isEmpty() || description.isEmpty()) {
-            Toast.makeText(this, "Please fill in all the fields.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Pakilagay ang lahat ng mga field", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -173,7 +173,7 @@ public class Issue extends AppCompatActivity {
             fileUri = null; // Clear the fileUri if you want to reset it as well
 
         } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, "No Gmail installed or cannot handle the request.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Walang Gmail na naka-install o hindi maaring hawakan ang request.", Toast.LENGTH_LONG).show();
         }
     }
 }

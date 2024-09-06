@@ -58,7 +58,6 @@ public class PostActivity extends AppCompatActivity {
     private ImageView Storetop;
     private ImageView Cast;
     private ImageView home;
-    private ImageView Community;
 
 
     private RelativeLayout noInternetLayout;
@@ -103,7 +102,6 @@ public class PostActivity extends AppCompatActivity {
         Storetop = findViewById(R.id.notification_icon);
         Cast = findViewById(R.id.Cast);
         home = findViewById(R.id.home);
-        Community = findViewById(R.id.Community);
 
         // Load profile image and username
         logo.setOnClickListener(new View.OnClickListener() {
@@ -145,17 +143,6 @@ public class PostActivity extends AppCompatActivity {
                 overridePendingTransition(0, 0); // No animation
             }
         });
-
-        // Navigation variables
-        Community.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PostActivity.this, PostActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0); // No animation
-            }
-        });
-
 
         Store.setOnClickListener(new View.OnClickListener() {
             @Override

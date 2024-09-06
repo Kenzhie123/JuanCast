@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a275acaa-0e25-476e-bd1f-7298c4056c3b" name="Changes" comment="" />
+    <list default="true" id="7946a517-dd7d-4715-9859-f924b0a54d91" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Juans/myapplication/src/main/java/com/JuanCast/myapplication/Notices.java" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/java/com/JuanCast/myapplication/Notices.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Juans/myapplication/src/main/java/com/JuanCast/myapplication/Setting.java" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/java/com/JuanCast/myapplication/Setting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Juans/myapplication/src/main/res/layout/activity_ads.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/res/layout/activity_ads.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Juans/myapplication/src/main/res/layout/activity_issue.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/res/layout/activity_issue.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Juans/myapplication/src/main/res/layout/activity_notices.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/res/layout/activity_notices.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Juans/myapplication/src/main/res/layout/activity_powerups.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Juans/myapplication/src/main/res/layout/activity_powerups.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,15 +51,15 @@
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "#2 on google-play-billing",
+    "git-widget-placeholder": "google-play-billing",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/IT EMBM/Documents/GitHub/JuanCastBago/JuanCast/Juans"
+    "last_opened_file_path": "C:/Users/IT EMBM/Documents/GitHub/JuanCastBago/JuanCast"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="a275acaa-0e25-476e-bd1f-7298c4056c3b" name="Changes" comment="" />
+      <changelist id="7946a517-dd7d-4715-9859-f924b0a54d91" name="Changes" comment="" />
       <created>1724730641881</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />

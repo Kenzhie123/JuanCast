@@ -398,7 +398,7 @@
             android:layout_marginTop="20dp"
             android:padding="8dp"
             android:fontFamily="@font/montserrat_regular"
-            android:text="1.  All converted Suns cannot be converted back to Stars.\n2. Make sure to input the correct number of Suns.\n3. Converted Suns will automatically be added to your balance."
+            android:text="(1) All converted Suns cannot be converted back to Stars\n(2) Make sure to input the correct number of Suns.\n(3) Converted Suns will automatically be added to your balance."
             android:textColor="#FFF"
             android:textSize="12sp" />
 

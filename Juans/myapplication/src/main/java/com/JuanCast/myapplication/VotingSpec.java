@@ -21,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.JuanCast.myapplication.models.Artist;
 import com.JuanCast.myapplication.models.ServerTime;
 import com.bumptech.glide.Glide;
@@ -179,6 +180,8 @@ public class VotingSpec extends AppCompatActivity {
                                 }
                             });
 
+
+
                             db.collection("artists").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot artistQuerySnapShot) {
@@ -213,7 +216,6 @@ public class VotingSpec extends AppCompatActivity {
                                                 }
 
                                                 Collections.sort(artistList,Collections.reverseOrder());
-
 
                                                 if(pollEnded)
                                                 {
