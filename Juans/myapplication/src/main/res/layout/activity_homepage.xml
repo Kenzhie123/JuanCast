@@ -105,8 +105,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="200dp"
                                     app:iss_auto_cycle="true"
-                                    app:iss_delay="4000"
-                                    app:iss_period="1000"
+                                    app:iss_delay="6000"
+                                    app:iss_period="6000"
                                     app:iss_title_background="@drawable/gradient"/>
 
                         </androidx.cardview.widget.CardView>
