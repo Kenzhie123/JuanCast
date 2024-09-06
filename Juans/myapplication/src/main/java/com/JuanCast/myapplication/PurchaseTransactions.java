@@ -21,6 +21,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -47,8 +48,6 @@ public class PurchaseTransactions extends AppCompatActivity {
 
     private TextView ads;
     private TextView t_purchasebutton;
-    private TextView promo;
-    private TextView cast;
 
     private SwipeRefreshLayout PT_PurchaseListRefreshLayout;
 
@@ -61,6 +60,7 @@ public class PurchaseTransactions extends AppCompatActivity {
         firebaseFirestore.collection("transaction_history")
                 .whereEqualTo("user_id",firebaseAuth.getCurrentUser().getUid())
                 .whereIn("transaction_type", Arrays.asList("star_purchase","powerup_purchase"))
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -125,9 +125,7 @@ public class PurchaseTransactions extends AppCompatActivity {
         Store = findViewById(R.id.Store);
         Cast = findViewById(R.id.Cast);
         ads = findViewById(R.id.ads);
-        cast = findViewById(R.id.cast);
         t_purchasebutton = findViewById(R.id.t_purchasebutton);
-        promo = findViewById(R.id.promo);
         PT_PurchaseTransactionsRecyclerView = findViewById(R.id.PT_PurchaseTransactionsRecyclerView);
         PT_PurchaseListRefreshLayout = findViewById(R.id.PT_PurchaseListRefreshLayout);
 
@@ -176,19 +174,6 @@ public class PurchaseTransactions extends AppCompatActivity {
 
         ads.setOnClickListener(v -> {
             Intent intent = new Intent(PurchaseTransactions.this, RewardActivity.class);
-            startActivity(intent);
-            overridePendingTransition(0, 0); // No animation
-        });
-
-
-        promo.setOnClickListener(v -> {
-            Intent intent = new Intent(PurchaseTransactions.this, RedemptionActivity.class);
-            startActivity(intent);
-            overridePendingTransition(0, 0); // No animation
-        });
-
-        cast.setOnClickListener(v -> {
-            Intent intent = new Intent(PurchaseTransactions.this, Transactions.class);
             startActivity(intent);
             overridePendingTransition(0, 0); // No animation
         });
