@@ -2,8 +2,11 @@ package com.JuanCast.myapplication.listadapters;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +32,9 @@ import com.bumptech.glide.request.target.Target;
 import com.JuanCast.myapplication.R;
 import com.JuanCast.myapplication.Tools;
 import com.JuanCast.myapplication.models.ArtistVotes;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -284,18 +290,83 @@ public class VSArtistVoteListAdapter extends RecyclerView.Adapter<VSArtistVoteLi
                                         db.collection("transaction_history").add(transactHistory).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                             @Override
                                             public void onSuccess(DocumentReference documentReference) {
-                                                if(updateCount[0] == 2)
-                                                {
-                                                    Toast.makeText(context,"You have successfully casted your vote",Toast.LENGTH_LONG).show();
+                                                if (updateCount[0] == 2) {
+                                                    // Hide the overlay and progress bar
                                                     CVP_Overlay.setVisibility(View.GONE);
                                                     CVP_ProgressBar.setVisibility(View.GONE);
                                                     dialog.dismiss();
-                                                }
-                                                else
-                                                {
+
+                                                    LayoutInflater inflater = LayoutInflater.from(context);
+                                                    View dialogView = inflater.inflate(R.layout.dialog_custom, null);
+                                                    // Show the new dialog box
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                                    builder.setView(dialogView);
+
+                                                    TextView dialogTitle = dialogView.findViewById(R.id.dialog_title);
+                                                    TextView dialogMessage = dialogView.findViewById(R.id.dialog_message);
+                                                    Button dialogButtonOk = dialogView.findViewById(R.id.dialog_button_ok);
+
+
+
+
+                                                    // Fetch the transaction history data from Firestore
+                                                    db.collection("transaction_history").document(documentReference.getId()).get()
+                                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        DocumentSnapshot document = task.getResult();
+                                                                        if (document.exists()) {
+                                                                            // Extract the transaction data
+                                                                            String date = document.getString("date");
+                                                                            String time = document.getString("time");
+                                                                            String referenceNumber = document.getString("reference_number");
+                                                                            Long starAmount = document.getLong((pollType.equals("Minor") ? "star" : "sun"));
+                                                                            Long sunAmount = document.getLong((pollType.equals("Minor") ? "sun" : "star"));
+
+                                                                            // Convert amounts to positive values
+                                                                            long displayStarAmount = (starAmount != null ? Math.abs(starAmount) : 0);
+                                                                            long displaySunAmount = (sunAmount != null ? Math.abs(sunAmount) : 0);
+
+                                                                            // Format and set the dialog's message
+                                                                            String message = String.format(
+                                                                                    "You have successfully cast your vote.\n\nDetails:\n" +
+                                                                                            "Date: %s\n" +
+                                                                                            "Time: %s\n" +
+                                                                                            "Reference Number: %s\n" +
+                                                                                            "Amount: %d\n" ,
+                                                                                    date, time, referenceNumber,
+                                                                                    displayStarAmount, displaySunAmount
+                                                                            );
+
+                                                                            dialogMessage.setText(message);
+                                                                        } else {
+                                                                            dialogMessage.setText("Failed to retrieve transaction details.");
+                                                                        }
+                                                                    } else {
+                                                                        dialogMessage.setText("Error retrieving transaction details.");
+                                                                    }
+                                                                }
+                                                            });
+
+                                                    AlertDialog newDialog = builder.create();
+                                                    dialogButtonOk.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            newDialog.dismiss();
+                                                        }
+                                                    });
+
+                                                    newDialog.show();
+
+                                                } else {
                                                     updateCount[0]++;
                                                 }
                                             }
+
+
+
+
                                         });
                                     }
 

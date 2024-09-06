@@ -268,6 +268,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp">
 
+
                 <LinearLayout
                     android:layout_width="450dp"
                     android:layout_height="wrap_content"
@@ -335,6 +336,7 @@
                         android:id="@+id/Notices"
                         android:layout_width="100dp"
                         android:layout_height="60dp"
+                        android:layout_marginRight="5dp"
                         android:background="@drawable/profilenmebackground"
                         android:fontFamily="@font/montserrat_bold"
                         android:gravity="center"
@@ -342,14 +344,102 @@
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
+                    <TextView
+                        android:id="@+id/promo"
+                        android:layout_width="100dp"
+                        android:layout_height="60dp"
+                        android:background="@drawable/profilenmebackground"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:gravity="center"
+                        android:text="Promo \n Code"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
 
                 </LinearLayout>
 
 
+
             </RelativeLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/promoLin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#54000000"
+        android:visibility="gone">
+
+
+    <LinearLayout
+
+        android:layout_marginTop="240dp"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/promobackground"
+        android:orientation="vertical">
+
+
+        <Button
+            android:id="@+id/back"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/cross"
+            android:layout_gravity="end"
+            android:backgroundTint="@color/danger"
+            android:gravity="center" />
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="30dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:textSize="20dp"
+               android:textColor="@color/white"
+                android:text="Promo Code"/>
+
+
+
+            <EditText
+                android:id="@+id/editTextPromoCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white"
+                android:textColorHint="#9CFFFFFF"
+                android:textSize="16dp"
+                android:hint="Enter Promo Code" />
+
+            <Button
+                android:layout_gravity="end"
+                android:id="@+id/buttonApplyPromoCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#66B32F"
+                android:textColor="@color/white"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="submit" />
 
         </LinearLayout>
-    </ScrollView>
+
+
+    </LinearLayout>
+
+    </LinearLayout>
 
 
 

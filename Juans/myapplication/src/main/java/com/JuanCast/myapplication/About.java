@@ -74,18 +74,4 @@ public class About extends AppCompatActivity {
         });
 
     }
-
-    @Override
-    public void onBackPressed() {
-        // Perform custom action before calling the default behavior
-        Intent intent = new Intent(this, Profile.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-
-        // Use overridePendingTransition after startActivity
-        overridePendingTransition(0, 0);
-
-        // Call the default back behavior
-        super.onBackPressed();
-    }
 }
